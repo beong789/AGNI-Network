@@ -26,9 +26,7 @@ graph_builder.add_node("tools", tool_node)
 
 llm_with_tools = llm.bind_tools(tools)
 
-# Define chatbot node (replace with your LLM call)
 def chatbot(state: MessagesState):
-    # Example: just return a placeholder message
     return {"messages": [llm_with_tools.invoke(state["messages"])]}
 
 graph_builder.add_node("chatbot", chatbot)
