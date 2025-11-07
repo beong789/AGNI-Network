@@ -22,14 +22,14 @@ const Footer: React.FC = () => {
             <h4 className="text-white font-semibold mb-3">Contact</h4>
             <p className="text-sm">
               Questions or feedback?<br />
-              <a href="mailto:info@fireriskmaps.com" className="text-orange-400 hover:text-orange-300 transition">
-                info@fireriskmaps.com
+              <a href="mailto:info@agnifire.com" className="text-orange-400 hover:text-orange-300 transition">
+                info@agnifire.com
               </a>
             </p>
           </div>
         </div>
         <div className="border-t border-gray-700 mt-8 pt-6 text-center text-sm">
-          <p>&copy; 2024 California Fire Risk Monitor. Built for safety.</p>
+          <p>&copy; 2025 AGNI Detection System. Built for safety at Reboot the Earth.</p>
         </div>
       </div>
     </footer>
