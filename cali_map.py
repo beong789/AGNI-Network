@@ -2,6 +2,7 @@ from urllib.request import urlopen
 import json
 import pandas as pd
 import plotly.express as px
+import agni_backend.src.scrapers.data_manager
 
 # Load GeoJSON
 with urlopen('https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/california-counties.geojson') as response:
@@ -33,7 +34,12 @@ fig = px.choropleth(
     locations='county',                 # must match county names
     featureidkey='properties.name',     # how to look up each feature
     color='danger_value',               # numeric values to color by
-    color_continuous_scale='Rainbow'
+    color_continuous_scale=[
+        (0.0, "green"),
+        (0.5, "yellow"),
+        (1.0, "red")
+    ],
+    range_color = (1, 3)
 )
 
 fig.update_geos(fitbounds="locations", visible=False)
