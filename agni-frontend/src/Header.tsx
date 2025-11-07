@@ -19,7 +19,7 @@ const Header: React.FC = () => {
               About
             </button>
             <button className="px-4 py-2 bg-white text-orange-600 rounded-lg font-semibold hover:bg-orange-50 transition cursor-pointer">
-              Get Alerts
+              Retrieve New Data
             </button>
           </div>
         </div>
