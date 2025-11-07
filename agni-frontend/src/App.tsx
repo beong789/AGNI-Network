@@ -1,35 +1,48 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// Main App Component
+import React, { useState } from 'react';
+import Header from './Header';
+import FireRiskMap from './FireRiskMap';
+import CurrentConditions from './CurrentConditions';
+import RegionalStatus from "./RegionalStatus"
+import InfoCard from './InfoCard';
+import Footer from './Footer';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [selectedRegion, setSelectedRegion] = useState<Region | null>(null);
+
+  const mockRegions: Region[] = [
+    { id: 1, name: 'Northern California', riskLevel: 'high', color: '#ef4444' },
+    { id: 2, name: 'Bay Area', riskLevel: 'moderate', color: '#f59e0b' },
+    { id: 3, name: 'Central Valley', riskLevel: 'low', color: '#22c55e' },
+    { id: 4, name: 'Southern California', riskLevel: 'very-high', color: '#dc2626' },
+  ];
+
+  const handleRegionSelect = (region: Region) => {
+    setSelectedRegion(region);
+    console.log('Selected region:', region);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      <Header />
+
+      <main className="flex-1 container mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2">
+            <FireRiskMap />
+          </div>
+
+          <div className="space-y-6">
+            <CurrentConditions />
+            <RegionalStatus regions={mockRegions} onRegionSelect={handleRegionSelect} />
+            <InfoCard />
+          </div>
+        </div>
+      </main>
+
+      <Footer />
+    </div>
+  );
 }
 
-export default App
+export default App;
