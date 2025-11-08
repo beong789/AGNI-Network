@@ -1,4 +1,6 @@
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+// Remove this unused line:
+// const API_URL = "http://backend:8000/api"; 
 
 export interface FireDangerData {
   county: string;

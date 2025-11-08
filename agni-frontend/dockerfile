@@ -1,0 +1,15 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copy only dependency files first (so Docker caches installs)
+COPY package*.json ./
+
+RUN npm install
+
+# Copy all other source files (excluding node_modules via .dockerignore)
+COPY . .
+
+EXPOSE 5173
+
+CMD ["npm", "run", "dev"]

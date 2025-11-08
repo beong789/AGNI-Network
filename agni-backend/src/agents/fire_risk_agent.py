@@ -4,18 +4,15 @@ from langgraph.graph.message import MessagesState
 import os
 from langgraph.graph import StateGraph, MessagesState, START, END
 from .tools import fire_danger
-from langchain.chat_models import init_chat_model
-from langgraph.checkpoint.memory import InMemorySaver
+from langgraph.checkpoint.memory import MemorySaver
 from langgraph.prebuilt import ToolNode
-from pathlib import Path
 from langchain_google_genai import ChatGoogleGenerativeAI
 
 api_key = os.getenv("GEMINI_API_KEY")
 if not api_key:
     raise ValueError("GEMINI_API_KEY environment variable is not set!")
-os.environ["GEMINI_API_KEY"] = api_key
 
-memory = InMemorySaver()
+memory = MemorySaver()
 
 llm = ChatGoogleGenerativeAI(
     model="gemini-2.0-flash-exp",
@@ -33,28 +30,22 @@ system_prompt = {
     )
 }
 
-# Get the path to the CSV file
 tools = [fire_danger]
 tool_node = ToolNode(tools=tools)
 
 # Create graph builder
 graph_builder = StateGraph[MessagesState, None, MessagesState, MessagesState](MessagesState)
 
-# Bind tools to LLM
 llm_with_tools = llm.bind_tools(tools)
 
 def chatbot(state: MessagesState):
     messages = state.get("messages", [])
-
     prompt = [system_prompt] + messages
-
     return {"messages": [llm_with_tools.invoke(prompt)]}
 
-# Add nodes BEFORE compiling
 graph_builder.add_node("chatbot", chatbot)
 graph_builder.add_node("tools", tool_node)
 
-# Add edges
 graph_builder.add_edge(START, "chatbot")
 graph_builder.add_edge("tools", "chatbot")
 
@@ -75,25 +66,4 @@ graph_builder.add_conditional_edges(
     {"tools": "tools", END: END},
 )
 
-# ✅ COMPILE AT THE END
 graph = graph_builder.compile(checkpointer=memory)
-    
-def stream_graph_updates(user_input: str):
-    events = graph.stream(
-        {"messages": [{"role": "user", "content": user_input}]},
-        {"configurable": {"thread_id": "1"}},
-        stream_mode="values"
-    )
-
-    for event in events:
-        last_message = event["messages"][-1]
-        if hasattr(last_message, "content") and last_message.content:
-            print("Assistant:", last_message.content)
-
-if __name__ == "__main__":
-    while True:
-        user_input = input("User: ")
-        if user_input.lower() in ["quit", "exit", "q"]:
-            print("Goodbye")
-            break
-        stream_graph_updates(user_input)
