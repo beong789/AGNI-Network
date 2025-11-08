@@ -1,9 +1,10 @@
 import pandas as pd
 import json
 from langchain_core.tools import tool
+from pathlib import Path
 
 @tool
-def fire_danger(county: str = None) -> str:
+def fire_danger(county: str = "") -> str:
     """Get fire danger data for California counties. 
     
     Args:
@@ -12,41 +13,41 @@ def fire_danger(county: str = None) -> str:
     Returns:
         JSON string with fire danger information including temperature, wind, humidity, and risk levels.
     """
-    # Adjust path based on where tools.py is located relative to the CSV
-    csv_path = "california_fire_danger_factors.csv"
+    # Get path to CSV
+    csv_path = Path(__file__).parent.parent / "scrapers" / "california_fire_danger_factors.csv"
+    
+    print(f"[DEBUG] Looking for CSV at: {csv_path}")
+    print(f"[DEBUG] File exists: {csv_path.exists()}")
+    print(f"[DEBUG] Requested county: '{county}'")
     
     try:
         df = pd.read_csv(csv_path)
+        print(f"[DEBUG] Successfully loaded CSV with {len(df)} rows")
+        print(f"[DEBUG] Available counties: {df['county'].tolist()[:5]}...")
         
-        if county:
+        if county and county.strip():
             # Filter for specific county
-            county_data = df[df['county'].str.lower() == county.lower()]
+            county_data = df[df['county'].str.lower() == county.lower().strip()]
             if county_data.empty:
-                return json.dumps({"error": f"County '{county}' not found"})
+                available = df['county'].unique().tolist()
+                return json.dumps({
+                    "error": f"County '{county}' not found",
+                    "available_counties": available[:10]
+                })
             data_json = county_data.to_dict(orient="records")
         else:
             # Return all counties
             data_json = df.to_dict(orient="records")
         
         return json.dumps(data_json, indent=2)
-    except FileNotFoundError:
-        return json.dumps({"error": "Fire danger data file not found"})
+    except FileNotFoundError as e:
+        return json.dumps({
+            "error": "Fire danger data file not found",
+            "path": str(csv_path),
+            "details": str(e)
+        })
     except Exception as e:
-        return json.dumps({"error": f"Error reading fire data: {str(e)}"})
-
-
-# Keep the old class for backward compatibility if needed
-class FireDangerTool:
-    name = "fire_danger"
-    description = "Get fire danger data for California counties"
-
-    def __init__(self, csv_path: str):
-        self.csv_path = csv_path
-    
-    def invoke(self, args=None):
-        try:
-            df = pd.read_csv(self.csv_path)
-            data_json = df.to_dict(orient="records")
-            return json.dumps(data_json, indent=2)
-        except Exception as e:
-            return json.dumps({"error": str(e)})
+        return json.dumps({
+            "error": f"Error reading fire data: {str(e)}",
+            "type": type(e).__name__
+        })
