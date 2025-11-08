@@ -6,12 +6,17 @@ export interface FireDangerData {
   temperature_f: number;
   wind_speed: string;
   wind_direction: string;
-  relative_humidity: string;
+  relative_humidity: number;  // Changed from string to number
   conditions: string;
   high_temp_risk: string;
   low_humidity_risk: string;
   high_wind_risk: string;
   fire_danger_level: string;
+  // Add the optional fields from FireData to match
+  drought_level?: string;
+  active_fires_nearby?: number;
+  statewide_active_fires?: number;
+  risk_score?: number;
 }
 
 export const api = {

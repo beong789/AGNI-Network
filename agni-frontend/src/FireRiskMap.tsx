@@ -7,22 +7,20 @@ import type { FireData } from './types';
 
 interface FireRiskMapProps {
   onCountyHover: (countyName: string | null) => void;
+  fireData: FireData[]; 
 }
 
-const FireRiskMap: React.FC<FireRiskMapProps> = ({ onCountyHover }) => {
+const FireRiskMap: React.FC<FireRiskMapProps> = ({ onCountyHover, fireData }) => {
   const [geojson, setGeojson] = useState<any>(null);
-  const [fireData, setFireData] = useState<FireData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [, setUpdateCounter] = useState(0); // ← Add this line
+  const [, setUpdateCounter] = useState(0);
 
   useEffect(() => {
-    Promise.all([
-      fetch(`${API_BASE_URL}/api/geojson`).then(res => res.json()),
-      fetch(`${API_BASE_URL}/api/fire-data`).then(res => res.json())
-    ])
-      .then(([geoData, fireDataRes]) => {
+    // Only fetch geojson, not fire data
+    fetch(`${API_BASE_URL}/api/geojson`)
+      .then(res => res.json())
+      .then(geoData => {
         setGeojson(geoData);
-        setFireData(fireDataRes);
         setLoading(false);
       })
       .catch(err => {

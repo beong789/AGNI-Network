@@ -11,6 +11,11 @@ from pathlib import Path
 load_dotenv(Path(__file__).parent.parent.parent / '.env')
 import json
 
+'''
+Scrapes data from multiple sources
+and lists the following values: county, timestamp, temperature, wind speed, wind direction, relative humidity, conditions, drought level, active fires nearby, statewide active fires, fire danger level, and risk score.
+'''
+
 class ImprovedFireDataCollector:
     """Fast multi-source fire danger data collector"""
     
@@ -278,48 +283,126 @@ class ImprovedFireDataCollector:
             print(f"  ⚠ FIRMS error: {e}")
             return {'active_fires_nearby': 0, 'has_recent_fire_activity': False}
     
-    # TO BE ADDED DUMMY CODE
     async def get_drought_data(self, session, county):
-        """Get drought monitor data for county"""
+        """Get drought monitor data for county from US Drought Monitor"""
         try:
             cache_key = f"drought_{county}"
             cached = self.get_cache(cache_key)
             if cached:
                 return cached
             
-            # The drought monitor data would be fetched here
-            # For now, returning structure
-            result = {
-                'drought_level': 'None',
-                'drought_severity_score': 0
+            # US Drought Monitor API endpoint for California counties
+            # Using the Data Download API for county statistics
+            drought_url = "https://usdmdataservices.unl.edu/api/CountyStatistics/GetCountyStatistics"
+            
+            # Calculate dates for current week
+            today = datetime.now()
+            date_str = today.strftime('%Y-%m-%d')
+            
+            params = {
+                'aoi': '06',  # California FIPS code
+                'startdate': date_str,
+                'enddate': date_str,
+                'statisticsType': '1'  # County level
             }
             
-            self.set_cache(cache_key, result, duration_minutes=1440)  # Cache for 24 hours
-            return result
+            async with session.get(drought_url, params=params, timeout=15) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    
+                    # Find this specific county in the data
+                    county_drought = None
+                    if data and isinstance(data, list):
+                        for entry in data:
+                            if county.lower() in entry.get('Name', '').lower():
+                                county_drought = entry
+                                break
+                    
+                    if county_drought:
+                        # Extract drought level (D0-D4 scale)
+                        # Check which drought category has the highest coverage
+                        d4 = float(county_drought.get('D4', 0))  # Exceptional
+                        d3 = float(county_drought.get('D3', 0))  # Extreme
+                        d2 = float(county_drought.get('D2', 0))  # Severe
+                        d1 = float(county_drought.get('D1', 0))  # Moderate
+                        d0 = float(county_drought.get('D0', 0))  # Abnormally Dry
+                        
+                        # Determine primary drought level
+                        if d4 > 0:
+                            level = 'Exceptional'
+                            score = 5
+                        elif d3 > 0:
+                            level = 'Extreme'
+                            score = 4
+                        elif d2 > 0:
+                            level = 'Severe'
+                            score = 3
+                        elif d1 > 0:
+                            level = 'Moderate'
+                            score = 2
+                        elif d0 > 0:
+                            level = 'Abnormally Dry'
+                            score = 1
+                        else:
+                            level = 'None'
+                            score = 0
+                    else:
+                        level = 'None'
+                        score = 0
+                    
+                    result = {
+                        'drought_level': level,
+                        'drought_severity_score': score
+                    }
+                    
+                    # Cache for 24 hours (drought data updates weekly)
+                    self.set_cache(cache_key, result, duration_minutes=1440)
+                    return result
+                else:
+                    print(f"  ⚠ Drought Monitor API returned status {response.status}")
+                    return {'drought_level': 'Unknown', 'drought_severity_score': 0}
             
         except Exception as e:
+            print(f"  ⚠ Drought data error for {county}: {e}")
             return {'drought_level': 'Unknown', 'drought_severity_score': 0}
     
-    # TO BE ADDED DUMMY CODE
     async def get_calfire_incidents(self, session):
-        """Get recent CAL FIRE incidents (statewide, not per county)"""
+        """Get recent CAL FIRE incidents (statewide)"""
         try:
             cache_key = "calfire_incidents"
             cached = self.get_cache(cache_key)
             if cached:
                 return cached
             
-            # CAL FIRE has incident feeds
-            # This would fetch their incident data
-            result = {
-                'total_active_incidents': 0,
-                'acres_burned_today': 0
-            }
+            # CAL FIRE incidents endpoint (unofficial but widely used)
+            calfire_url = "https://www.fire.ca.gov/umbraco/api/IncidentApi/List?inactive=false"
             
-            self.set_cache(cache_key, result, duration_minutes=30)
-            return result
+            async with session.get(calfire_url, timeout=10) as response:
+                if response.status == 200:
+                    incidents = await response.json()
+                    
+                    # Count active incidents and calculate acres
+                    active_count = len(incidents) if incidents else 0
+                    total_acres = sum(
+                        float(inc.get('AcresBurned', 0) or 0) 
+                        for inc in incidents
+                    ) if incidents else 0
+                    
+                    result = {
+                        'total_active_incidents': active_count,
+                        'acres_burned_today': int(total_acres),
+                        'incidents': incidents[:5] if incidents else []  # Store top 5 for reference
+                    }
+                    
+                    # Cache for 30 minutes
+                    self.set_cache(cache_key, result, duration_minutes=30)
+                    return result
+                else:
+                    print(f"  ⚠ CAL FIRE API returned status {response.status}")
+                    return {'total_active_incidents': 0, 'acres_burned_today': 0}
             
         except Exception as e:
+            print(f"  ⚠ CAL FIRE error: {e}")
             return {'total_active_incidents': 0, 'acres_burned_today': 0}
     
     def get_cache(self, key):

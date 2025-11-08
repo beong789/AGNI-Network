@@ -1,21 +1,46 @@
-import { Shield, FileText, AlertTriangle, Upload, Users } from 'lucide-react';
+import { Shield, FileText, AlertTriangle, Upload, Users, LogOut } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const FirstResponders: React.FC = () => {
-  return (
-    <main className="flex-1 container mx-auto px-4 py-8">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-lg shadow-lg p-8 mb-8">
-          <div className="flex items-center gap-4">
-            <Shield className="w-12 h-12" />
-            <div>
-              <h1 className="text-3xl font-bold">First Responders Portal</h1>
-              <p className="text-blue-100 mt-2">
-                Real-time incident reporting and resource management
-              </p>
+    const navigate = useNavigate();
+  
+    // Check if logged in
+    useEffect(() => {
+      if (localStorage.getItem('responderAuth') !== 'true') {
+        navigate('/login');
+      }
+    }, [navigate]);
+  
+    const handleLogout = () => {
+      localStorage.removeItem('responderAuth');
+      navigate('/');
+    };
+  
+    return (
+      <main className="flex-1 container mx-auto px-4 py-8">
+        <div className="max-w-6xl mx-auto">
+          {/* Header with Logout Button */}
+          <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-lg shadow-lg p-8 mb-8">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <Shield className="w-12 h-12" />
+                <div>
+                  <h1 className="text-3xl font-bold">First Responders Portal</h1>
+                  <p className="text-blue-100 mt-2">
+                    Real-time incident reporting and resource management
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition"
+              >
+                <LogOut className="w-5 h-5" />
+                <span>Logout</span>
+              </button>
             </div>
           </div>
-        </div>
 
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

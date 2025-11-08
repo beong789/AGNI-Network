@@ -3,7 +3,8 @@ import Header from './Header';
 import Footer from './Footer';
 import Home from './Home';
 import About from './About';
-import FirstResponders from './FirstResponders';  // Add this import
+import FirstResponders from './FirstResponders';
+import Login from './Login';  // Add this import
 
 function App() {
   return (
@@ -12,7 +13,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
-        <Route path="/first-responders" element={<FirstResponders />} />  {/* Add this route */}
+        <Route path="/login" element={<Login />} />  
+        <Route path="/first-responders" element={<FirstResponders />} />
       </Routes>
       <Footer />
     </div>
