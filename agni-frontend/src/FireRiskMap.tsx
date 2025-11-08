@@ -1,11 +1,51 @@
-// Fire Risk Map Component
-import MapLegend from './MapLegend'
+import { useState, useEffect } from 'react';
+// @ts-ignore
+import Plot from 'react-plotly.js';
+import MapLegend from './MapLegend';
 import { MapPin } from 'lucide-react';
+import { API_BASE_URL } from './services/api';
 
+interface FireRiskMapProps {
+  onCountyHover: (countyName: string | null) => void;
+}
 
-const FireRiskMap: React.FC = () => {
+const FireRiskMap: React.FC<FireRiskMapProps> = ({ onCountyHover }) => {
+  const [geojson, setGeojson] = useState<any>(null);
+  const [fireData, setFireData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    Promise.all([
+      fetch(`${API_BASE_URL}/api/geojson`).then(res => res.json()),
+      fetch(`${API_BASE_URL}/api/fire-data`).then(res => res.json())
+    ])
+      .then(([geoData, fireDataRes]) => {
+        setGeojson(geoData);
+        
+        const levelMap: Record<string, number> = {
+          'Low': 1,
+          'Moderate': 2,
+          'High': 3,
+          'Very High': 4,
+          'Extreme': 5
+        };
+        
+        const processedData = fireDataRes.map((item: any) => ({
+          county: item.county,
+          danger_value: levelMap[item.fire_danger_level] || 1,
+        }));
+        
+        setFireData(processedData);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Failed to load map data:', err);
+        setLoading(false);
+      });
+  }, []);
+
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6">
+    <div className="bg-white rounded-xl shadow-lg p-6 h-full flex flex-col">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-gray-800">Fire Risk Map</h2>
         <div className="flex items-center gap-2 text-sm text-gray-600">
@@ -13,16 +53,92 @@ const FireRiskMap: React.FC = () => {
           <span>Last updated: Just now</span>
         </div>
       </div>
-      
-      <div className="relative bg-gradient-to-br from-blue-50 to-green-50 rounded-lg h-[500px] flex items-center justify-center border-2 border-dashed border-gray-300">
-        <div className="text-center">
-          <svg className="w-64 h-64 mx-auto text-gray-300" viewBox="0 0 200 300" fill="currentColor">
-            <path d="M150,20 L160,40 L170,80 L175,120 L180,160 L180,200 L175,240 L165,270 L150,290 L130,295 L110,290 L90,280 L75,260 L65,230 L60,200 L55,170 L50,140 L45,110 L50,80 L60,50 L75,30 L95,20 L120,15 Z" 
-                  opacity="0.3" />
-          </svg>
-          <p className="text-gray-500 mt-4 text-lg font-semibold">Map will load here</p>
-          <p className="text-gray-400 text-sm">Integrate with Mapbox or Leaflet</p>
-        </div>
+
+      <div className="relative rounded-lg flex-1 min-h-[500px] bg-gray-50">
+        {loading ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto"></div>
+              <p className="text-gray-500 mt-4">Loading map...</p>
+            </div>
+          </div>
+        ) : geojson && fireData.length > 0 ? (
+          <Plot
+            // @ts-ignore
+            data={[
+              {
+                type: 'choropleth',
+                geojson: geojson,
+                locations: fireData.map(d => d.county),
+                z: fireData.map(d => d.danger_value),
+                featureidkey: 'properties.name',
+                colorscale: [
+                  [0, '#22c55e'],      // 1 = Low (Green)
+                  [0.5, '#22c55e'],    // Still green up to halfway
+                  [0.5, '#f59e0b'],    // 2 = Moderate (Orange) 
+                  [0.75, '#f59e0b'],   // Stay orange
+                  [0.75, '#ef4444'],   // 3 = High (Red)
+                  [1, '#dc2626']       // 4-5 = Very High (Dark Red)
+                ],
+                colorbar: {
+                  title: { text: 'Risk' },
+                  tickvals: [1, 2, 3],
+                  ticktext: ['Low', 'Moderate', 'High'],
+                  len: 0.5
+                },
+                marker: {
+                  line: {
+                    color: 'white',
+                    width: 0.5
+                  }
+                },
+                hovertemplate: '<b>%{location}</b><br>Risk Level: %{z}<extra></extra>'
+              }
+            ]}
+            layout={{
+              geo: {
+                scope: 'usa',
+                projection: { 
+                  type: 'albers usa',
+                  scale: 1
+                },
+                showlakes: false,
+                showland: false,
+                showcoastlines: false,
+                showframe: false,
+                bgcolor: 'rgb(243, 243, 243)',
+                center: { lon: -119.4, lat: 37 },
+                lonaxis: { range: [-125, -114] },
+                lataxis: { range: [32, 42] }
+              },
+              margin: { r: 0, t: 0, l: 0, b: 0 },
+              autosize: true,
+              dragmode: false
+            }}
+            style={{ width: '100%', height: '100%' }}
+            config={{ 
+              responsive: true, 
+              displayModeBar: false,
+              staticPlot: false,
+              scrollZoom: false,
+              doubleClick: false
+            }}
+            useResizeHandler={true}
+            onHover={(data) => {
+              if (data.points && data.points.length > 0) {
+                const countyName = data.points[0].location;
+                onCountyHover(countyName as string);
+              }
+            }}
+            onUnhover={() => {
+              onCountyHover(null);
+            }}
+          />
+        ) : (
+          <div className="flex items-center justify-center h-full">
+            <p className="text-gray-500">No data available</p>
+          </div>
+        )}
       </div>
 
       <MapLegend />
@@ -30,4 +146,4 @@ const FireRiskMap: React.FC = () => {
   );
 };
 
-export default FireRiskMap
+export default FireRiskMap;

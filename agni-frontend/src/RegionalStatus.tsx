@@ -9,8 +9,10 @@ interface RegionalStatusProps {
 const RegionalStatus: React.FC<RegionalStatusProps> = ({ regions, onRegionSelect }) => {
   return (
     <div className="bg-white rounded-xl shadow-lg p-6">
-      <h3 className="text-xl font-bold text-gray-800 mb-4">Regional Status</h3>
-      <div className="space-y-3">
+      <h3 className="text-xl font-bold text-gray-800 mb-4">
+        Regional Status ({regions.length} counties)
+      </h3>
+      <div className="space-y-3 max-h-96 overflow-y-auto pr-2">
         {regions.map((region) => (
           <div 
             key={region.id}
@@ -36,7 +38,5 @@ const RegionalStatus: React.FC<RegionalStatusProps> = ({ regions, onRegionSelect
     </div>
   );
 };
-
-
 
 export default RegionalStatus

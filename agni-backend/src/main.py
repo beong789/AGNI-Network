@@ -50,6 +50,16 @@ def get_county_data(county: str):
     record = county_data.replace([np.nan, np.inf, -np.inf], None).to_dict(orient="records")[0]
     return JSONResponse(content=jsonable_encoder(record))
 
+@app.get("/api/geojson")
+async def get_geojson():
+    """Serve California counties GeoJSON"""
+    from urllib.request import urlopen
+    import json
+    
+    with urlopen('https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/california-counties.geojson') as response:
+        counties = json.load(response)
+    return counties
+
 @app.post("/api/refresh-data")
 async def refresh_fire_data():
     """Trigger data collection from NWS API"""

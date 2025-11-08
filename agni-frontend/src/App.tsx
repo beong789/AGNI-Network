@@ -6,20 +6,30 @@ import RegionalStatus from "./RegionalStatus"
 import InfoCard from './InfoCard';
 import ChatAssistant from './ChatAssistant';
 import Footer from './Footer';
+import { api } from './services/api';
+import type { FireDangerData } from './services/api'
 
 function App() {
   const [regions, setRegions] = useState<Region[]>([]);
   const [selectedRegion, setSelectedRegion] = useState<Region | null>(null);
+  const [selectedCountyData, setSelectedCountyData] = useState<FireDangerData | null>(null);
+  const [allFireData, setAllFireData] = useState<FireDangerData[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/fire-data")
-      .then(res => res.json())
+    api.getAllFireData()
       .then(data => {
-        const formatted = data.map((item: any, index: number) => ({
+        setAllFireData(data);
+        
+        const toColor = (level: string) =>
+          level === 'High' ? '#ef4444' :
+          level === 'Moderate' ? '#f59e0b' :
+          '#22c55e';
+        
+        const formatted = data.map((item, index) => ({
           id: index,
           name: item.county,
-          riskLevel: item.fire_danger_level,  // adjust if your CSV uses different field names
-          color: item.color || "#f59e0b"      // placeholder or logic for color mapping
+          riskLevel: item.fire_danger_level,
+          color: toColor(item.fire_danger_level),
         }));
         setRegions(formatted);
       })
@@ -28,7 +38,19 @@ function App() {
 
   const handleRegionSelect = (region: Region) => {
     setSelectedRegion(region);
-    console.log("Selected region:", region);
+    const countyData = allFireData.find(d => d.county === region.name);
+    if (countyData) {
+      setSelectedCountyData(countyData);
+    }
+  };
+
+  const handleCountyHover = (countyName: string | null) => {
+    if (countyName) {
+      const countyData = allFireData.find(d => d.county === countyName);
+      if (countyData) {
+        setSelectedCountyData(countyData);
+      }
+    }
   };
 
   return (
@@ -38,11 +60,11 @@ function App() {
       <main className="flex-1 container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
-            <FireRiskMap />
+            <FireRiskMap onCountyHover={handleCountyHover} />
           </div>
 
           <div className="space-y-6">
-            <CurrentConditions />
+            <CurrentConditions countyData={selectedCountyData} />
             <RegionalStatus regions={regions} onRegionSelect={handleRegionSelect} />
             <InfoCard />
           </div>
