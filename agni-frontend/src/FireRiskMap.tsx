@@ -105,7 +105,6 @@ const FireRiskMap: React.FC<FireRiskMapProps> = ({ onCountyHover }) => {
                     width: 0.5
                   }
                 },
-                // Enhanced hover with ALL the new data
                 customdata: fireData.map(d => ([
                   d.fire_danger_level,
                   d.temperature_f,
@@ -182,7 +181,6 @@ const FireRiskMap: React.FC<FireRiskMapProps> = ({ onCountyHover }) => {
 
       <MapLegend />
       
-      {/* New stats summary */}
       {countiesWithFires > 0 && (
         <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm">
           <p className="text-red-800">
