@@ -1,1 +1,2 @@
-# AGNI-Network
+# AGNI-Network 
+This project is a collaboration by UCSC Students as part of the Reboot Earth 2025 hackathon. The name AGNI is inspired by the Hindu God of Fire, Agni. It is a fitting title since the first Reboot Hackathon was held in India. This dashboard is designed to aggregate data from various sources and create a visual map of California by fire risk areas. Additionally there is an AI agent that has been incorporated into the dashboard that can make recommendations to fire departments based on data points to intiate control burns or other fire management techniques. 
