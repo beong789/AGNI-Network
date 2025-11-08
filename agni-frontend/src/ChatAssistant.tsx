@@ -23,7 +23,7 @@ const ChatAssistant = () => {
   const userMessage = input;
   setInput('');
 
-  setMessages(prev => [...prev, { text: "🔥 Assistant is thinking...", from: 'bot' }]);
+  setMessages(prev => [...prev, { text: "🔥 AGNI is thinking...", from: 'bot' }]);
 
   try {
     const res = await fetch(`${API_BASE_URL}/api/chat`, {
@@ -33,7 +33,7 @@ const ChatAssistant = () => {
     });
     const data = await res.json();
 
-    setMessages(prev => prev.filter(msg => msg.text !== "🔥 Assistant is thinking..."));
+    setMessages(prev => prev.filter(msg => msg.text !== "🔥 AGNI is thinking..."));
 
     setMessages(prev => [...prev, { text: data.response, from: 'bot' }]);
   } catch (err) {
@@ -48,7 +48,7 @@ const ChatAssistant = () => {
       {isOpen && (
         <div className="w-72 h-96 bg-gradient-to-b from-red-600 via-orange-500 to-yellow-400 rounded-lg shadow-lg flex flex-col overflow-hidden text-white">
           <div className="bg-red-700 px-4 py-2 flex justify-between items-center font-bold">
-            <span>Fire Assistant</span>
+            <span>AGNI</span>
             <button onClick={() => setIsOpen(false)} className="text-white text-xl font-bold">×</button>
           </div>
 
