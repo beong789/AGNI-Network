@@ -24,7 +24,7 @@ const FireRiskMap: React.FC<FireRiskMapProps> = ({ onCountyHover }) => {
         
         const levelMap: Record<string, number> = {
           'Low': 1,
-          'Moderate': 2,
+          'Moderate': 1.6,    
           'High': 3,
           'Very High': 4,
           'Extreme': 5
@@ -73,18 +73,18 @@ const FireRiskMap: React.FC<FireRiskMapProps> = ({ onCountyHover }) => {
                 z: fireData.map(d => d.danger_value),
                 featureidkey: 'properties.name',
                 colorscale: [
-                  [0, '#22c55e'],      // 1 = Low (Green)
-                  [0.5, '#22c55e'],    // Still green up to halfway
-                  [0.5, '#f59e0b'],    // 2 = Moderate (Orange) 
-                  [0.75, '#f59e0b'],   // Stay orange
-                  [0.75, '#ef4444'],   // 3 = High (Red)
-                  [1, '#dc2626']       // 4-5 = Very High (Dark Red)
+                  [0, 'rgb(34, 197, 94)'],      // Green
+                  [0.4, 'rgb(34, 197, 94)'],    
+                  [0.4, 'rgb(245, 158, 11)'],   // Orange
+                  [0.6, 'rgb(245, 158, 11)'],   
+                  [0.6, 'rgb(239, 68, 68)'],    // Red
+                  [1, 'rgb(220, 38, 38)']       // Dark red
                 ],
                 colorbar: {
                   title: { text: 'Risk' },
-                  tickvals: [1, 2, 3],
-                  ticktext: ['Low', 'Moderate', 'High'],
-                  len: 0.5
+                  tickvals: [1, 2, 3, 4, 5],
+                  ticktext: ['Low', 'Moderate', 'High', 'Very High', 'Extreme'],
+                  len: 0.6
                 },
                 marker: {
                   line: {
