@@ -119,11 +119,38 @@ async def subscribe_alerts(subscription: AlertSubscription):
         with open(subs_file, 'w') as f:
             json.dump(subscriptions, f, indent=2)
         
+        # Send welcome email
+        try:
+            from scrapers.notification_manager import send_welcome_email
+            send_welcome_email(subscription.email, subscription.county)
+        except Exception as email_error:
+            print(f"Warning: Failed to send welcome email: {email_error}")
+            # Don't fail the subscription if email fails
+        
         return {
             "message": "Successfully subscribed",
             "status": "success",
             "email": subscription.email,
             "county": subscription.county
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/send-alerts")
+async def trigger_alerts():
+    """Manually trigger fire danger alerts"""
+    try:
+        from scrapers.notification_manager import check_and_send_alerts
+        
+        # Send alerts for risk score >= 6 (High and Very High)
+        result = check_and_send_alerts(threshold=6)
+        
+        return {
+            "status": "success",
+            "alerts_sent": result["alerts_sent"],
+            "alerts_failed": result["alerts_failed"],
+            "total_subscriptions": result["total_subscriptions"]
         }
         
     except Exception as e:

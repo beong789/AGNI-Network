@@ -24,10 +24,10 @@ const EmailAlertSignup = () => {
       const data = await response.json();
       
       if (response.ok) {
-        setMessage('✅ Subscribed! You\'ll get alerts for ' + county + ' County');
+        setMessage('✅ Subscribed! Check your email for confirmation.');
         setEmail('');
         setCounty('');
-        setTimeout(() => setIsOpen(false), 2000);
+        setTimeout(() => setIsOpen(false), 3000); // 3 seconds to read message
       } else {
         setMessage('❌ ' + (data.detail || 'Failed to subscribe'));
       }
