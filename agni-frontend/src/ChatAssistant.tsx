@@ -45,41 +45,66 @@ const ChatAssistant = () => {
 
   return (
     <div className="fixed bottom-4 right-4 z-50">
-      {isOpen && (
-        <div className="w-72 h-96 bg-gradient-to-b from-red-600 via-orange-500 to-yellow-400 rounded-lg shadow-lg flex flex-col overflow-hidden text-white">
-          <div className="bg-red-700 px-4 py-2 flex justify-between items-center font-bold">
-            <span>AGNI</span>
-            <button onClick={() => setIsOpen(false)} className="text-white text-xl font-bold cursor-pointer">×</button>
+            {isOpen && (
+        <div className="w-96 h-[32rem] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border-2 border-orange-500">
+          {/* Header with gradient */}
+          <div className="bg-gradient-to-r from-red-600 via-orange-500 to-red-600 px-5 py-4 flex justify-between items-center">
+            <div className="flex items-center gap-3">
+            <img 
+                src="/agni-mascot.svg" 
+                alt="AGNI" 
+                className="w-12 h-12 hover:scale-110 transition-transform duration-300" 
+                style={{ animation: 'wiggle 2s ease-in-out infinite' }}
+              />
+              <span className="text-white font-bold text-lg">AGNI Assistant</span>
+            </div>
+            <button 
+              onClick={() => setIsOpen(false)} 
+              className="text-white text-2xl font-bold cursor-pointer hover:scale-110 transition-transform hover:rotate-90 duration-300"
+            >
+              ×
+            </button>
           </div>
 
-          <div className="flex-1 p-3 overflow-y-auto space-y-2">
+          {/* Messages area with better spacing */}
+          <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-gradient-to-b from-orange-50 to-red-50">
+            {messages.length === 0 && (
+              <div className="text-center text-gray-500 mt-8">
+                <div className="text-4xl mb-2">🔥</div>
+                <p className="text-sm">Ask me anything regarding fire risk!</p>
+              </div>
+            )}
             {messages.map((msg, idx) => (
               <div
                 key={idx}
-                className={`p-2 rounded-md text-sm max-w-[80%] ${
-                  msg.from === 'user'
-                    ? 'bg-red-200 text-red-900 self-end'
-                    : 'bg-orange-100 text-orange-900 self-start'
-                }`}
+                className={`flex ${msg.from === 'user' ? 'justify-end' : 'justify-start'}`}
               >
-                {msg.text}
+                <div
+                  className={`p-3 rounded-2xl text-sm max-w-[85%] shadow-md ${
+                    msg.from === 'user'
+                      ? 'bg-gradient-to-br from-red-500 to-orange-500 text-white rounded-br-sm'
+                      : 'bg-white text-gray-800 rounded-bl-sm border border-orange-200'
+                  }`}
+                >
+                  {msg.text}
+                </div>
               </div>
             ))}
           </div>
 
-          <div className="p-2 border-t border-red-400 flex">
+          {/* Input area with better styling */}
+          <div className="p-4 bg-white border-t-2 border-orange-200 flex gap-2">
             <input
               type="text"
               value={input}
               onChange={e => setInput(e.target.value)}
-              placeholder="Type a message..."
-              className="flex-1 border rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-red-400 text-black"
+              placeholder="Ask about fire safety..."
+              className="flex-1 border-2 border-orange-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-black"
               onKeyDown={e => e.key === 'Enter' && handleSend()}
             />
             <button
               onClick={handleSend}
-              className="ml-2 bg-red-700 text-white px-3 py-1 rounded-md hover:bg-red-800"
-            >
+              className="bg-gradient-to-r from-red-600 to-orange-500 text-white px-5 py-2 rounded-full hover:from-red-700 hover:to-orange-600 active:scale-95 active:shadow-sm font-semibold shadow-md hover:shadow-lg transition-all cursor-pointer"            >
               Send
             </button>
           </div>
@@ -89,7 +114,7 @@ const ChatAssistant = () => {
       {!isOpen && (
         <button
           onClick={handleClick}
-          className={`fire-button w-20 h-20 rounded-full shadow-2xl flex items-center justify-center cursor-pointer text-lg hover:scale-110 transition-transform ${
+          className={`fire-button w-20 h-20 rounded-full shadow-2xl flex items-center justify-center cursor-pointer text-lg hover:scale-110 transition-transform transition-all duration-300 ease-out ${
             burst ? 'burst' : ''
           }`}
         >
