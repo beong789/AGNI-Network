@@ -5,6 +5,10 @@ env_path = Path(__file__).parent.parent / '.env'
 load_dotenv(dotenv_path=env_path)
 
 from fastapi import FastAPI
+from fastapi import HTTPException
+from fastapi.responses import JSONResponse
+from fastapi.encoders import jsonable_encoder
+import numpy as np
 from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 from pathlib import Path
@@ -15,7 +19,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Vite dev server
+    allow_origins=["*"],  # Wildcard for development
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -31,18 +35,20 @@ def read_root():
 def get_fire_data():
     """Get current fire danger data for all counties"""
     csv_path = Path(__file__).parent / "scrapers" / "california_fire_danger_factors.csv"
-    df = pd.read_csv(csv_path)
-    return df.to_dict(orient="records")
+    df = pd.read_csv(csv_path, keep_default_na=False, na_values=[])
+    records = df.replace([np.nan, np.inf, -np.inf], None).to_dict(orient="records")
+    return JSONResponse(content=jsonable_encoder(records))
 
 @app.get("/api/fire-data/{county}")
 def get_county_data(county: str):
     """Get fire danger data for a specific county"""
     csv_path = Path(__file__).parent / "scrapers" / "california_fire_danger_factors.csv"
-    df = pd.read_csv(csv_path)
-    county_data = df[df['county'] == county]
+    df = pd.read_csv(csv_path, keep_default_na=False, na_values=[])
+    county_data = df[df['county'].str.lower() == county.lower()]
     if county_data.empty:
-        return {"error": "County not found"}
-    return county_data.to_dict(orient="records")[0]
+        raise HTTPException(status_code=404, detail="County not found")
+    record = county_data.replace([np.nan, np.inf, -np.inf], None).to_dict(orient="records")[0]
+    return JSONResponse(content=jsonable_encoder(record))
 
 @app.post("/api/refresh-data")
 async def refresh_fire_data():

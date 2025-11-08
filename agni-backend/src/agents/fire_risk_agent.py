@@ -1,3 +1,6 @@
+from langgraph.graph.message import MessagesState
+
+
 import os
 from langgraph.graph import StateGraph, MessagesState, START, END
 from .tools import fire_danger
@@ -35,7 +38,7 @@ tools = [fire_danger]
 tool_node = ToolNode(tools=tools)
 
 # Create graph builder
-graph_builder = StateGraph(MessagesState)
+graph_builder = StateGraph[MessagesState, None, MessagesState, MessagesState](MessagesState)
 
 # Bind tools to LLM
 llm_with_tools = llm.bind_tools(tools)
