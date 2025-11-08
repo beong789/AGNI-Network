@@ -1,4 +1,3 @@
-version: '3.9'
 services:
   frontend:
     build: ./agni-frontend
@@ -10,7 +9,7 @@ services:
       - /app/node_modules
     command: npm run dev
     environment:
-      - VITE_API_URL=http://localhost:8000  # Changed!
+      - VITE_API_URL=http://localhost:8000 
     depends_on:
       - backend
     networks:
@@ -23,7 +22,6 @@ services:
     volumes:
       - ./agni-backend:/app
     environment:
-      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
       - GEMINI_API_KEY=${GEMINI_API_KEY}
     env_file:
       - ./agni-backend/.env

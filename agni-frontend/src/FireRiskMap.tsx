@@ -69,7 +69,6 @@ const FireRiskMap: React.FC<FireRiskMapProps> = ({ onCountyHover }) => {
           </div>
         ) : geojson && fireData.length > 0 ? (
           <Plot
-            // @ts-ignore
             data={[
               {
                 type: 'choropleth',
@@ -164,7 +163,6 @@ const FireRiskMap: React.FC<FireRiskMapProps> = ({ onCountyHover }) => {
                   doubleClick: false
                 }}
                 useResizeHandler={true}
-                revision={0}  
                 onHover={(data: any) => {
                   if (data.points && data.points.length > 0) {
                     const countyName = data.points[0].location;
