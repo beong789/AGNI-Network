@@ -27,7 +27,7 @@ const EmailAlertSignup = () => {
         setMessage('✅ Subscribed! Check your email for confirmation.');
         setEmail('');
         setCounty('');
-        setTimeout(() => setIsOpen(false), 3000); // 3 seconds to read message
+        setTimeout(() => setIsOpen(false), 3000);
       } else {
         setMessage('❌ ' + (data.detail || 'Failed to subscribe'));
       }
