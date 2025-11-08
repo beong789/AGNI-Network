@@ -19,6 +19,17 @@ llm = ChatGoogleGenerativeAI(
     google_api_key=api_key
 )
 
+system_prompt = {
+    "role": "system",
+    "content": (
+        "You are AGNI, an intelligent assistant specialized in analyzing and predicting fire risks. "
+        "Your goal is to help users understand current fire danger levels, provide guidance, "
+        "and answer questions related to fire safety and risk factors. "
+        "Always maintain a professional and helpful tone. "
+        "Never mention Gemini or that you are a language model."
+    )
+}
+
 # Get the path to the CSV file
 tools = [fire_danger]
 tool_node = ToolNode(tools=tools)
@@ -30,7 +41,11 @@ graph_builder = StateGraph(MessagesState)
 llm_with_tools = llm.bind_tools(tools)
 
 def chatbot(state: MessagesState):
-    return {"messages": [llm_with_tools.invoke(state["messages"])]}
+    messages = state.get("messages", [])
+
+    prompt = [system_prompt] + messages
+
+    return {"messages": [llm_with_tools.invoke(prompt)]}
 
 # Add nodes BEFORE compiling
 graph_builder.add_node("chatbot", chatbot)
