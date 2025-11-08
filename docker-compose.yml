@@ -10,7 +10,7 @@ services:
       - /app/node_modules
     command: npm run dev
     environment:
-      - VITE_API_URL=http://localhost:5000  # Changed!
+      - VITE_API_URL=http://localhost:8000  # Changed!
     depends_on:
       - backend
     networks:
@@ -19,7 +19,7 @@ services:
   backend:
     build: ./agni-backend
     ports:
-      - "5000:8000"
+      - "8000:8000"
     volumes:
       - ./agni-backend:/app
     environment:
