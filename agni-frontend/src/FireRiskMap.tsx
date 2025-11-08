@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-// @ts-ignore
 import Plot from 'react-plotly.js';
 import MapLegend from './MapLegend';
 import { MapPin, Flame } from 'lucide-react';

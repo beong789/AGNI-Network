@@ -13,6 +13,9 @@ from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 from pathlib import Path
 from api.routes import router as chat_router
+from pydantic import BaseModel, EmailStr
+from datetime import datetime
+import json
 
 
 app = FastAPI()
@@ -78,6 +81,53 @@ async def refresh_fire_data():
         collector.save_to_csv(fire_data, 'california_fire_danger_factors.csv')
         return {"status": "success", "counties": len(fire_data)}
     return {"status": "error", "message": "Failed to collect data"}
+
+class AlertSubscription(BaseModel):
+    email: EmailStr
+    county: str
+
+@app.post("/api/subscribe-alerts")
+async def subscribe_alerts(subscription: AlertSubscription):
+    """Subscribe to fire danger email alerts"""
+    try:
+        # Path to store subscriptions
+        subs_file = Path(__file__).parent / "scrapers" / "alert_subscriptions.json"
+        
+        # Load existing subscriptions
+        if subs_file.exists():
+            with open(subs_file, 'r') as f:
+                subscriptions = json.load(f)
+        else:
+            subscriptions = []
+        
+        # Check if already subscribed
+        existing = next((s for s in subscriptions 
+                        if s['email'] == subscription.email 
+                        and s['county'].lower() == subscription.county.lower()), None)
+        
+        if existing:
+            return {"message": "Already subscribed", "status": "existing"}
+        
+        # Add new subscription
+        subscriptions.append({
+            "email": subscription.email,
+            "county": subscription.county,
+            "subscribed_at": datetime.now().isoformat()
+        })
+        
+        # Save to file
+        with open(subs_file, 'w') as f:
+            json.dump(subscriptions, f, indent=2)
+        
+        return {
+            "message": "Successfully subscribed",
+            "status": "success",
+            "email": subscription.email,
+            "county": subscription.county
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
     import uvicorn

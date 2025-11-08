@@ -192,20 +192,40 @@ class ImprovedFireDataCollector:
             if cached:
                 return cached
             
-            # Note: You need to get a free API key from https://firms.modaps.eosdis.nasa.gov/api/
-            # For demo, returning mock data structure
-            result = {
-                'active_fires_nearby': 0,
-                'has_recent_fire_activity': False
-            }
+            # Check if we have API key
+            if not self.nasa_api_key:
+                return {'active_fires_nearby': 0, 'has_recent_fire_activity': False}
             
-            self.set_cache(cache_key, result, duration_minutes=120)
-            return result
+            # Build FIRMS API URL
+            # Format: /api/area/csv/API_KEY/SOURCE/lat,lon,radius/days
+            firms_url = f"https://firms.modaps.eosdis.nasa.gov/api/area/csv/{self.nasa_api_key}/VIIRS_SNPP_NRT/{lat},{lon},{radius_km}/1"
+            
+            async with session.get(firms_url, timeout=15) as response:
+                if response.status == 200:
+                    # Parse CSV response
+                    text = await response.text()
+                    lines = text.strip().split('\n')
+                    
+                    # Skip header, count data rows
+                    fire_count = len(lines) - 1 if len(lines) > 1 else 0
+                    
+                    result = {
+                        'active_fires_nearby': fire_count,
+                        'has_recent_fire_activity': fire_count > 0
+                    }
+                    
+                    # Cache for 2 hours
+                    self.set_cache(cache_key, result, duration_minutes=120)
+                    return result
+                else:
+                    print(f"  ⚠ FIRMS API returned status {response.status}")
+                    return {'active_fires_nearby': 0, 'has_recent_fire_activity': False}
             
         except Exception as e:
             print(f"  ⚠ FIRMS error: {e}")
             return {'active_fires_nearby': 0, 'has_recent_fire_activity': False}
     
+    # TO BE ADDED DUMMY CODE
     async def get_drought_data(self, session, county):
         """Get drought monitor data for county"""
         try:
@@ -227,6 +247,7 @@ class ImprovedFireDataCollector:
         except Exception as e:
             return {'drought_level': 'Unknown', 'drought_severity_score': 0}
     
+    # TO BE ADDED DUMMY CODE
     async def get_calfire_incidents(self, session):
         """Get recent CAL FIRE incidents (statewide, not per county)"""
         try:

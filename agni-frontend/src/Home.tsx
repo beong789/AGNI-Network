@@ -4,6 +4,7 @@ import CurrentConditions from './CurrentConditions';
 import RegionalStatus from "./RegionalStatus"
 import InfoCard from './InfoCard';
 import ChatAssistant from './ChatAssistant';
+import EmailAlertSignup from './EmailAlertSignup';
 import { api } from './services/api';
 import type { FireDangerData } from './services/api';
 import type { Region } from './types';
@@ -81,6 +82,7 @@ function Home() {
         </div>
       </main>
       <ChatAssistant />
+      <EmailAlertSignup />
     </>
   );
 }
