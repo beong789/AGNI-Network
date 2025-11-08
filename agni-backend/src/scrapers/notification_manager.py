@@ -45,14 +45,6 @@ Current Conditions:
 • Wind Direction: {data.get('wind_direction', 'N/A')}
 • Conditions: {data.get('conditions', 'N/A')}
 
-{f"🔥 Active Fires Nearby: {data.get('active_fires_nearby', 0)}" if data.get('active_fires_nearby', 0) > 0 else "No active fires detected nearby"}
-
-RECOMMENDATIONS:
-- Stay alert and monitor local conditions
-- Avoid outdoor burning or spark-producing activities
-- Have evacuation plan ready
-- Follow local fire authority guidance
-
 This alert was triggered because fire danger reached {risk_level} level in your subscribed area.
 
 Stay safe,
