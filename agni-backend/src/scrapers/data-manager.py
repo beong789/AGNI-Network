@@ -2,6 +2,7 @@ import requests
 import csv
 from datetime import datetime
 import time
+import os
 
 class FireDangerDataCollector:
     """Collect fire danger factors for California counties"""
@@ -189,11 +190,15 @@ class FireDangerDataCollector:
         return all_data
     
     def save_to_csv(self, data, filename='california_fire_danger_factors.csv'):
-        """Save fire danger data to CSV"""
+        """Save fire danger data to CSV in the same directory as the script"""
         if not data:
             print("No data to save.")
             return
-        
+
+        # Get the directory where this script is located
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        filepath = os.path.join(script_dir, filename)
+
         fieldnames = [
             'county', 'timestamp', 'temperature_f', 'wind_speed', 
             'wind_direction', 'relative_humidity', 'conditions',
@@ -201,13 +206,13 @@ class FireDangerDataCollector:
             'fire_danger_level'
         ]
         
-        with open(filename, 'w', newline='', encoding='utf-8') as csvfile:
+        with open(filepath, 'w', newline='', encoding='utf-8') as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
             writer.writerows(data)
         
-        print(f"\n✓ Saved fire danger data for {len(data)} counties to {filename}")
-        return filename
+        print(f"\n✓ Saved fire danger data for {len(data)} counties to {filepath}")
+        return filepath
 
 
 # Example usage
