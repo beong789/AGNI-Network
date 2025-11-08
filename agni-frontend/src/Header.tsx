@@ -1,23 +1,25 @@
-// Header Component
+import { Link } from 'react-router-dom';
 import { Flame } from 'lucide-react';
-
 
 const Header: React.FC = () => {
   return (
     <header className="bg-gradient-to-r from-orange-600 to-red-600 text-white shadow-lg">
       <div className="container mx-auto px-4 py-6">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-3 hover:opacity-90 transition">
             <Flame className="w-8 h-8" />
             <div>
               <h1 className="text-3xl font-bold">AGNI</h1>
               <p className="text-orange-100 text-sm">Real-time wildfire risk assessment</p>
             </div>
-          </div>
+          </Link>
           <div className="flex items-center gap-4">
-            <button className="px-4 py-2 bg-white/20 rounded-lg hover:bg-white/30 transition cursor-pointer">
+            <Link 
+              to="/about"
+              className="px-4 py-2 bg-white/20 rounded-lg hover:bg-white/30 transition cursor-pointer"
+            >
               About
-            </button>
+            </Link>
             <button className="px-4 py-2 bg-white text-orange-600 rounded-lg font-semibold hover:bg-orange-50 transition cursor-pointer">
               Retrieve New Data
             </button>
@@ -28,4 +30,4 @@ const Header: React.FC = () => {
   );
 };
 
-export default Header
+export default Header;

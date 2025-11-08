@@ -32,4 +32,10 @@
 
 .fire-button.burst {
   animation: burst-flame 0.5s forwards;
+  transform-origin: bottom right; 
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
 }
