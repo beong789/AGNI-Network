@@ -4,7 +4,7 @@ import './fireAnimation.css';
 
 const ChatAssistant = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [burst, setBurst] = useState(false); // triggers burst animation
+  const [burst, setBurst] = useState(false);
   const [messages, setMessages] = useState<{ text: string; from: 'user' | 'bot' }[]>([]);
   const [input, setInput] = useState('');
 
@@ -49,7 +49,7 @@ const ChatAssistant = () => {
         <div className="w-72 h-96 bg-gradient-to-b from-red-600 via-orange-500 to-yellow-400 rounded-lg shadow-lg flex flex-col overflow-hidden text-white">
           <div className="bg-red-700 px-4 py-2 flex justify-between items-center font-bold">
             <span>AGNI</span>
-            <button onClick={() => setIsOpen(false)} className="text-white text-xl font-bold">×</button>
+            <button onClick={() => setIsOpen(false)} className="text-white text-xl font-bold cursor-pointer">×</button>
           </div>
 
           <div className="flex-1 p-3 overflow-y-auto space-y-2">

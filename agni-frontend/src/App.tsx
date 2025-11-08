@@ -1,5 +1,4 @@
-// Main App Component
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from './Header';
 import FireRiskMap from './FireRiskMap';
 import CurrentConditions from './CurrentConditions';
@@ -9,18 +8,27 @@ import ChatAssistant from './ChatAssistant';
 import Footer from './Footer';
 
 function App() {
-  //const [selectedRegion, setSelectedRegion] = useState<Region | null>(null);
+  const [regions, setRegions] = useState<Region[]>([]);
+  const [selectedRegion, setSelectedRegion] = useState<Region | null>(null);
 
-  const mockRegions: Region[] = [
-    { id: 1, name: 'Northern California', riskLevel: 'high', color: '#ef4444' },
-    { id: 2, name: 'Bay Area', riskLevel: 'moderate', color: '#f59e0b' },
-    { id: 3, name: 'Central Valley', riskLevel: 'low', color: '#22c55e' },
-    { id: 4, name: 'Southern California', riskLevel: 'very-high', color: '#dc2626' },
-  ];
+  useEffect(() => {
+    fetch("http://localhost:8000/api/fire-data")
+      .then(res => res.json())
+      .then(data => {
+        const formatted = data.map((item: any, index: number) => ({
+          id: index,
+          name: item.county,
+          riskLevel: item.fire_danger_level,  // adjust if your CSV uses different field names
+          color: item.color || "#f59e0b"      // placeholder or logic for color mapping
+        }));
+        setRegions(formatted);
+      })
+      .catch(err => console.error("Failed to fetch regions:", err));
+  }, []);
 
   const handleRegionSelect = (region: Region) => {
     setSelectedRegion(region);
-    console.log('Selected region:', region);
+    console.log("Selected region:", region);
   };
 
   return (
@@ -35,14 +43,13 @@ function App() {
 
           <div className="space-y-6">
             <CurrentConditions />
-            <RegionalStatus regions={mockRegions} onRegionSelect={handleRegionSelect} />
+            <RegionalStatus regions={regions} onRegionSelect={handleRegionSelect} />
             <InfoCard />
           </div>
         </div>
       </main>
 
       <Footer />
-
       <ChatAssistant />
     </div>
   );
