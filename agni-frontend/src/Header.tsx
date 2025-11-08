@@ -10,7 +10,7 @@ const Header: React.FC = () => {
           <div className="flex items-center gap-3">
             <Flame className="w-8 h-8" />
             <div>
-              <h1 className="text-3xl font-bold">AGNI Fire Detection Network</h1>
+              <h1 className="text-3xl font-bold">AGNI</h1>
               <p className="text-orange-100 text-sm">Real-time wildfire risk assessment</p>
             </div>
           </div>
@@ -19,7 +19,7 @@ const Header: React.FC = () => {
               About
             </button>
             <button className="px-4 py-2 bg-white text-orange-600 rounded-lg font-semibold hover:bg-orange-50 transition cursor-pointer">
-              Get Alerts
+              Retrieve New Data
             </button>
           </div>
         </div>

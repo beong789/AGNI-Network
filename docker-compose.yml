@@ -7,14 +7,30 @@ services:
       - "5173:5173"
     volumes:
       - ./agni-frontend:/app
-      - /app/node_modules  # This prevents node_modules from being overwritten
+      - /app/node_modules
     command: npm run dev
+    environment:
+      - VITE_API_URL=http://localhost:5000  # Changed!
     depends_on:
       - backend
+    networks:
+      - agni-network
+      
   backend:
     build: ./agni-backend
     ports:
-      - "5000:5000"
+      - "5000:8000"
     volumes:
       - ./agni-backend:/app
-    command: python app.py
+    environment:
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    env_file:
+      - ./agni-backend/.env
+    command: python src/main.py
+    networks:
+      - agni-network
+
+networks:
+  agni-network:
+    driver: bridge

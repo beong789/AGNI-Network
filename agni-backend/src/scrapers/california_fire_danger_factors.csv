@@ -1,0 +1,59 @@
+county,timestamp,temperature_f,wind_speed,wind_direction,relative_humidity,conditions,high_temp_risk,low_humidity_risk,high_wind_risk,fire_danger_level
+Los Angeles,2025-11-07 16:45:56,80,5 mph,SW,N/A,Sunny,No,No,No,Low
+San Diego,2025-11-07 16:45:56,73,5 to 10 mph,W,N/A,Mostly Sunny,No,No,No,Low
+Orange,2025-11-07 16:45:57,79,5 mph,SW,N/A,Sunny,No,No,No,Low
+Riverside,2025-11-07 16:45:57,85,5 to 10 mph,W,N/A,Sunny,Yes,No,No,Moderate
+San Bernardino,2025-11-07 16:45:58,87,5 mph,W,N/A,Sunny,Yes,No,No,Moderate
+Ventura,2025-11-07 16:45:59,80,5 mph,N,N/A,Sunny,No,No,No,Low
+Santa Barbara,2025-11-07 16:45:59,80,5 mph,NE,N/A,Sunny,No,No,No,Low
+Imperial,2025-11-07 16:46:00,88,0 mph,,N/A,Sunny,Yes,No,No,Moderate
+San Luis Obispo,2025-11-07 16:46:01,78,5 mph,N,N/A,Sunny,No,No,No,Low
+Fresno,2025-11-07 16:46:01,70,5 mph,NNW,N/A,Sunny,No,No,No,Low
+Kern,2025-11-07 16:46:02,70,0 to 5 mph,WNW,N/A,Sunny,No,No,No,Low
+Kings,2025-11-07 16:46:02,72,5 to 10 mph,N,N/A,Sunny,No,No,No,Low
+Tulare,2025-11-07 16:46:03,66,5 mph,W,N/A,Sunny,No,No,No,Low
+Madera,2025-11-07 16:46:04,70,5 mph,W,N/A,Sunny,No,No,No,Low
+Merced,2025-11-07 16:46:04,73,10 mph,NNW,N/A,Sunny,No,No,No,Low
+Stanislaus,2025-11-07 16:46:05,74,10 mph,NW,N/A,Sunny,No,No,No,Low
+San Joaquin,2025-11-07 16:46:06,73,6 mph,NW,N/A,Sunny,No,No,No,Low
+San Francisco,2025-11-07 16:46:06,68,10 to 16 mph,W,N/A,Sunny,No,No,No,Low
+Alameda,2025-11-07 16:46:07,68,10 mph,WNW,N/A,Sunny,No,No,No,Low
+Contra Costa,2025-11-07 16:46:08,68,9 mph,WNW,N/A,Sunny,No,No,No,Low
+San Mateo,2025-11-07 16:46:08,71,7 to 13 mph,NW,N/A,Sunny,No,No,No,Low
+Santa Clara,2025-11-07 16:46:09,72,10 mph,NNW,N/A,Sunny,No,No,No,Low
+Marin,2025-11-07 16:46:09,68,9 to 13 mph,WNW,N/A,Sunny,No,No,No,Low
+Sonoma,2025-11-07 16:46:10,72,7 to 10 mph,WNW,N/A,Sunny,No,No,No,Low
+Napa,2025-11-07 16:46:11,68,7 mph,N,N/A,Sunny,No,No,No,Low
+Solano,2025-11-07 16:46:11,73,7 mph,NW,N/A,Sunny,No,No,No,Low
+Sacramento,2025-11-07 16:46:12,71,6 mph,NNW,N/A,Sunny,No,No,No,Low
+Placer,2025-11-07 16:46:13,68,2 mph,WNW,N/A,Sunny,No,No,No,Low
+El Dorado,2025-11-07 16:46:13,64,3 mph,NW,N/A,Sunny,No,No,No,Low
+Yolo,2025-11-07 16:46:14,71,6 mph,N,N/A,Sunny,No,No,No,Low
+Sutter,2025-11-07 16:46:15,70,6 mph,NNW,N/A,Sunny,No,No,No,Low
+Yuba,2025-11-07 16:46:15,71,5 mph,WNW,N/A,Sunny,No,No,No,Low
+Shasta,2025-11-07 16:46:16,68,2 mph,NNE,N/A,Sunny,No,No,No,Low
+Tehama,2025-11-07 16:46:16,68,6 mph,NNW,N/A,Sunny,No,No,No,Low
+Butte,2025-11-07 16:46:17,69,6 mph,WNW,N/A,Sunny,No,No,No,Low
+Glenn,2025-11-07 16:46:19,68,6 mph,N,N/A,Sunny,No,No,No,Low
+Colusa,2025-11-07 16:46:19,70,6 mph,NNW,N/A,Sunny,No,No,No,Low
+Siskiyou,2025-11-07 16:46:20,58,5 mph,NNW,N/A,Mostly Sunny,No,No,No,Low
+Modoc,2025-11-07 16:46:20,54,5 mph,WNW,N/A,Mostly Sunny,No,No,No,Low
+Lassen,2025-11-07 16:46:21,53,5 mph,W,N/A,Mostly Sunny,No,No,No,Low
+Plumas,2025-11-07 16:46:22,47,5 mph,W,N/A,Mostly Sunny,No,No,No,Low
+Trinity,2025-11-07 16:46:22,50,3 mph,W,N/A,Mostly Sunny,No,No,No,Low
+Humboldt,2025-11-07 16:46:23,59,2 mph,N,N/A,Partly Sunny,No,No,No,Low
+Del Norte,2025-11-07 16:46:24,60,3 mph,N,N/A,Mostly Sunny,No,No,No,Low
+Mendocino,2025-11-07 16:46:24,65,3 mph,W,N/A,Mostly Sunny,No,No,No,Low
+Lake,2025-11-07 16:46:25,60,1 mph,NNW,N/A,Sunny,No,No,No,Low
+Nevada,2025-11-07 16:46:25,58,2 mph,WNW,N/A,Sunny,No,No,No,Low
+Sierra,2025-11-07 16:46:26,45,5 mph,WSW,N/A,Mostly Sunny,No,No,No,Low
+Alpine,2025-11-07 16:46:27,47,5 mph,NW,N/A,Sunny,No,No,No,Low
+Amador,2025-11-07 16:46:27,70,6 mph,NW,N/A,Sunny,No,No,No,Low
+Calaveras,2025-11-07 16:46:28,68,6 mph,NW,N/A,Sunny,No,No,No,Low
+Tuolumne,2025-11-07 16:46:29,63,5 mph,NW,N/A,Sunny,No,No,No,Low
+Mariposa,2025-11-07 16:46:29,68,5 mph,NW,N/A,Sunny,No,No,No,Low
+Mono,2025-11-07 16:46:30,60,5 mph,N,N/A,Sunny,No,No,No,Low
+Inyo,2025-11-07 16:46:30,62,6 mph,N,N/A,Sunny,No,No,No,Low
+Monterey,2025-11-07 16:46:31,63,10 mph,NW,N/A,Sunny,No,No,No,Low
+San Benito,2025-11-07 16:46:32,68,16 mph,NNW,N/A,Sunny,No,No,No,Low
+Santa Cruz,2025-11-07 16:46:32,71,8 to 12 mph,NNW,N/A,Sunny,No,No,No,Low

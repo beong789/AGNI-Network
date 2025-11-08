@@ -5,6 +5,7 @@ import FireRiskMap from './FireRiskMap';
 import CurrentConditions from './CurrentConditions';
 import RegionalStatus from "./RegionalStatus"
 import InfoCard from './InfoCard';
+import ChatAssistant from './ChatAssistant';
 import Footer from './Footer';
 
 function App() {
@@ -41,6 +42,8 @@ function App() {
       </main>
 
       <Footer />
+
+      <ChatAssistant />
     </div>
   );
 }
