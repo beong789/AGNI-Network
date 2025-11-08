@@ -40,8 +40,10 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({ countyData }) => 
             <div className="flex justify-between items-center">
               <span className="text-gray-600">Fire Danger</span>
               <span className={`font-bold text-lg ${
-                countyData.fire_danger_level === 'High' ? 'text-red-600' :
-                countyData.fire_danger_level === 'Moderate' ? 'text-orange-600' :
+                countyData.fire_danger_level === 'Very High' ? 'text-red-600' :
+                countyData.fire_danger_level === 'High' ? 'text-orange-600' :
+                countyData.fire_danger_level === 'Elevated' ? 'text-yellow-600' :
+                countyData.fire_danger_level === 'Moderate' ? 'text-lime-600' :
                 'text-green-600'
               }`}>
                 {countyData.fire_danger_level}

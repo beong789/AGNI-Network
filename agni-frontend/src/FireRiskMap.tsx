@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 // @ts-ignore
 import Plot from 'react-plotly.js';
 import MapLegend from './MapLegend';
-import { MapPin } from 'lucide-react';
+import { MapPin, Flame } from 'lucide-react';
 import { API_BASE_URL } from './services/api';
+import type { FireData } from './types';
 
 interface FireRiskMapProps {
   onCountyHover: (countyName: string | null) => void;
@@ -11,7 +12,7 @@ interface FireRiskMapProps {
 
 const FireRiskMap: React.FC<FireRiskMapProps> = ({ onCountyHover }) => {
   const [geojson, setGeojson] = useState<any>(null);
-  const [fireData, setFireData] = useState<any[]>([]);
+  const [fireData, setFireData] = useState<FireData[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -21,21 +22,7 @@ const FireRiskMap: React.FC<FireRiskMapProps> = ({ onCountyHover }) => {
     ])
       .then(([geoData, fireDataRes]) => {
         setGeojson(geoData);
-        
-        const levelMap: Record<string, number> = {
-          'Low': 1,
-          'Moderate': 1.6,    
-          'High': 3,
-          'Very High': 4,
-          'Extreme': 5
-        };
-        
-        const processedData = fireDataRes.map((item: any) => ({
-          county: item.county,
-          danger_value: levelMap[item.fire_danger_level] || 1,
-        }));
-        
-        setFireData(processedData);
+        setFireData(fireDataRes);
         setLoading(false);
       })
       .catch(err => {
@@ -44,17 +31,35 @@ const FireRiskMap: React.FC<FireRiskMapProps> = ({ onCountyHover }) => {
       });
   }, []);
 
+  // Calculate total active fires
+  const totalActiveFires = fireData.reduce((sum, d) => 
+    sum + (d.active_fires_nearby || 0), 0
+  );
+
+  // Get counties with active fires
+  const countiesWithFires = fireData.filter(d => 
+    (d.active_fires_nearby || 0) > 0
+  ).length;
+
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 h-full flex flex-col">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-gray-800">Fire Risk Map</h2>
-        <div className="flex items-center gap-2 text-sm text-gray-600">
-          <MapPin className="w-4 h-4" />
-          <span>Last updated: Just now</span>
+        <div className="flex items-center gap-4">
+          {totalActiveFires > 0 && (
+            <div className="flex items-center gap-2 bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-semibold animate-pulse">
+              <Flame className="w-4 h-4" />
+              <span>{totalActiveFires} Active Fires</span>
+            </div>
+          )}
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <MapPin className="w-4 h-4" />
+            <span>Last updated: Just now</span>
+          </div>
         </div>
       </div>
 
-      <div className="relative rounded-lg flex-1 min-h-[500px] bg-gray-50">
+      <div className="relative rounded-lg flex-1 min-h-[600px] bg-gray-50">       
         {loading ? (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
@@ -70,21 +75,29 @@ const FireRiskMap: React.FC<FireRiskMapProps> = ({ onCountyHover }) => {
                 type: 'choropleth',
                 geojson: geojson,
                 locations: fireData.map(d => d.county),
-                z: fireData.map(d => d.danger_value),
+                z: fireData.map(d => d.risk_score || 0),
+                zmin: 0,
+                zmax: 10,
                 featureidkey: 'properties.name',
                 colorscale: [
-                  [0, 'rgb(34, 197, 94)'],      // Green
-                  [0.4, 'rgb(34, 197, 94)'],    
-                  [0.4, 'rgb(245, 158, 11)'],   // Orange
-                  [0.6, 'rgb(245, 158, 11)'],   
-                  [0.6, 'rgb(239, 68, 68)'],    // Red
-                  [1, 'rgb(220, 38, 38)']       // Dark red
+                  [0, '#22c55e'],      // 0-1 Low = Green
+                  [0.2, '#22c55e'],    
+                  [0.2, '#a3e635'],    // 2-3 Moderate = Light green
+                  [0.4, '#a3e635'],    
+                  [0.4, '#fbbf24'],    // 4-5 Elevated = Yellow
+                  [0.6, '#fbbf24'],    
+                  [0.6, '#f97316'],    // 6-7 High = Orange
+                  [0.8, '#f97316'],    
+                  [0.8, '#ef4444'],    // 8-10 Very High = Red
+                  [1, '#ef4444']
                 ],
                 colorbar: {
-                  title: { text: 'Risk' },
-                  tickvals: [1, 2, 3, 4, 5],
-                  ticktext: ['Low', 'Moderate', 'High', 'Very High', 'Extreme'],
-                  len: 0.6
+                  title: { text: 'Risk Level', font: { size: 14, color: '#374151' } },
+                  tickvals: [1, 2.5, 4.5, 6.5, 9],
+                  ticktext: ['Low', 'Moderate', 'Elevated', 'High', 'Very High'],
+                  len: 0.7,
+                  thickness: 15,
+                  outlinewidth: 0
                 },
                 marker: {
                   line: {
@@ -92,47 +105,73 @@ const FireRiskMap: React.FC<FireRiskMapProps> = ({ onCountyHover }) => {
                     width: 0.5
                   }
                 },
-                hovertemplate: '<b>%{location}</b><br>Risk Level: %{z}<extra></extra>'
+                // Enhanced hover with ALL the new data
+                customdata: fireData.map(d => ([
+                  d.fire_danger_level,
+                  d.temperature_f,
+                  d.relative_humidity,
+                  d.drought_level || 'Unknown',
+                  d.active_fires_nearby || 0
+                ])),
+                hovertemplate: 
+                  '<b>%{location} County</b><br>' +
+                  'Risk Score: %{z}/10<br>' +
+                  'Level: %{customdata[0]}<br>' +
+                  'Temp: %{customdata[1]}°F<br>' +
+                  'Humidity: %{customdata[2]}%<br>' +
+                  'Drought: %{customdata[3]}<br>' +
+                  'Active Fires: %{customdata[4]}<br>' +
+                  '<extra></extra>'
               }
             ]}
-            layout={{
-              geo: {
-                scope: 'usa',
-                projection: { 
-                  type: 'albers usa',
-                  scale: 1
+              layout={{
+                geo: {
+                  scope: 'usa',
+                  projection: { 
+                    type: 'albers usa',
+                    scale: 1
+                  },
+                  showlakes: false,
+                  showland: false,
+                  showcoastlines: false,
+                  showframe: false,
+                  bgcolor: 'rgb(249, 250, 251)',
+                  center: { lon: -119.4, lat: 37 },
+                  lonaxis: { range: [-125, -114] },
+                  lataxis: { range: [32, 42] },
+                  fitbounds: false  
                 },
-                showlakes: false,
-                showland: false,
-                showcoastlines: false,
-                showframe: false,
-                bgcolor: 'rgb(243, 243, 243)',
-                center: { lon: -119.4, lat: 37 },
-                lonaxis: { range: [-125, -114] },
-                lataxis: { range: [32, 42] }
-              },
-              margin: { r: 0, t: 0, l: 0, b: 0 },
-              autosize: true,
-              dragmode: false
-            }}
-            style={{ width: '100%', height: '100%' }}
-            config={{ 
-              responsive: true, 
-              displayModeBar: false,
-              staticPlot: false,
-              scrollZoom: false,
-              doubleClick: false
-            }}
-            useResizeHandler={true}
-            onHover={(data) => {
-              if (data.points && data.points.length > 0) {
-                const countyName = data.points[0].location;
-                onCountyHover(countyName as string);
-              }
-            }}
-            onUnhover={() => {
-              onCountyHover(null);
-            }}
+                margin: { r: 0, t: 0, l: 0, b: 0 },
+                autosize: true,
+                dragmode: false,
+                hovermode: 'closest',
+                uirevision: 'constant',
+                datarevision: 0, 
+                hoverlabel: {
+                  bgcolor: 'white',
+                  bordercolor: '#e5e7eb',
+                  font: { 
+                    size: 13,
+                    color: '#1f2937' 
+                  }
+                }
+                }}
+                style={{ width: '100%', height: '100%' }}
+                config={{ 
+                  responsive: false,
+                  displayModeBar: false,
+                  staticPlot: false,
+                  scrollZoom: false,
+                  doubleClick: false
+                }}
+                useResizeHandler={true}
+                revision={0}  
+                onHover={(data: any) => {
+                  if (data.points && data.points.length > 0) {
+                    const countyName = data.points[0].location;
+                    onCountyHover(countyName as string);
+                  }
+                }}
           />
         ) : (
           <div className="flex items-center justify-center h-full">
@@ -142,6 +181,15 @@ const FireRiskMap: React.FC<FireRiskMapProps> = ({ onCountyHover }) => {
       </div>
 
       <MapLegend />
+      
+      {/* New stats summary */}
+      {countiesWithFires > 0 && (
+        <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm">
+          <p className="text-red-800">
+            ⚠️ <span className="font-semibold">{countiesWithFires}</span> counties have active fire activity
+          </p>
+        </div>
+      )}
     </div>
   );
 };

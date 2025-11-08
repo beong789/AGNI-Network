@@ -66,14 +66,14 @@ async def get_geojson():
 
 @app.post("/api/refresh-data")
 async def refresh_fire_data():
-    """Trigger data collection from NWS API"""
-    from scrapers.data_manager import FireDangerDataCollector
+    """Trigger comprehensive data collection"""
+    from scrapers.data_manager import ImprovedFireDataCollector
     
-    collector = FireDangerDataCollector()
-    fire_data = collector.collect_all_data()
+    collector = ImprovedFireDataCollector()
+    fire_data = await collector.collect_all_data_async() 
     
     if fire_data:
-        collector.save_to_csv(fire_data)
+        collector.save_to_csv(fire_data, 'california_fire_danger_factors.csv')
         return {"status": "success", "counties": len(fire_data)}
     return {"status": "error", "message": "Failed to collect data"}
 
