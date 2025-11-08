@@ -1,0 +1,35 @@
+/* Smooth pulsing flame */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.1);
+    filter: brightness(1.2);
+  }
+}
+
+/* Burst animation on click */
+@keyframes burst-flame {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(2.5) rotate(20deg); opacity: 0.7; filter: blur(2px); }
+  100% { transform: scale(3.5) rotate(-20deg); opacity: 0; filter: blur(4px); }
+}
+
+.fire-button {
+  background: linear-gradient(45deg, #ff3c00, #ffb347, #ff4500);
+  animation: pulse 1.2s ease-in-out infinite;
+  color: white;
+  font-size: 1.5rem;
+  box-shadow: 0 0 10px #ff4500, 0 0 20px #ff8c00;
+  transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.fire-button:hover {
+  box-shadow: 0 0 15px #ff4500, 0 0 30px #ffb347;
+}
+
+.fire-button.burst {
+  animation: burst-flame 0.5s forwards;
+}
