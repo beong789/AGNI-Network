@@ -19,10 +19,16 @@ function Home() {
       .then(data => {
         setAllFireData(data);
         
-        const toColor = (level: string) =>
-          level === 'High' ? '#ef4444' :
-          level === 'Moderate' ? '#f59e0b' :
-          '#22c55e';
+        const toColor = (level: string) => {
+            switch(level) {
+              case 'Very High': return '#ef4444';      // Red
+              case 'High': return '#f97316';           // Orange
+              case 'Elevated': return '#fbbf24';       // Yellow/amber
+              case 'Moderate': return '#a3e635';       // Light green
+              case 'Low': return '#22c55e';            // Green
+              default: return '#9ca3af';               // Gray
+            }
+          };
         
         const formatted = data.map((item, index) => ({
           id: index,
@@ -49,8 +55,10 @@ function Home() {
   };
 
   const handleCountyHover = (countyName: string | null) => {
+    console.log('Looking for county:', countyName);  
     if (countyName) {
       const countyData = allFireData.find(d => d.county === countyName);
+      console.log('Found data:', countyData);  
       if (countyData) {
         setSelectedCountyData(countyData);
       }
