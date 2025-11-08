@@ -31,6 +31,11 @@ function Home() {
           color: toColor(item.fire_danger_level),
         }));
         setRegions(formatted);
+        
+        // Set first county as default for Current Conditions
+        if (data.length > 0) {
+          setSelectedCountyData(data[0]);
+        }
       })
       .catch(err => console.error("Failed to fetch regions:", err));
   }, []);

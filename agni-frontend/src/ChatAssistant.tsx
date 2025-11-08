@@ -89,11 +89,11 @@ const ChatAssistant = () => {
       {!isOpen && (
         <button
           onClick={handleClick}
-          className={`fire-button w-12 h-12 rounded-full shadow-lg flex items-center justify-center cursor-pointer text-lg ${
+          className={`fire-button w-20 h-20 rounded-full shadow-2xl flex items-center justify-center cursor-pointer text-lg hover:scale-110 transition-transform ${
             burst ? 'burst' : ''
           }`}
         >
-          🔥
+          <img src="/agni-mascot.svg" alt="AGNI" className="w-28 h-28" />
         </button>
       )}
     </div>
