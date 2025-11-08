@@ -148,7 +148,7 @@ const About = () => {
                 <h3 className="text-xl font-bold text-gray-800 mb-3">Backend</h3>
                 <ul className="space-y-2 text-gray-600">
                   <li>• FastAPI (Python)</li>
-                  <li>• National Weather Service API + NASA FIRMS API</li>
+                  <li>• National Weather Service API + NASA FIRMS</li>
                   <li>• LangGraph + Google Gemini AI</li>
                   <li>• Real-time data processing</li>
                 </ul>

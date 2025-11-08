@@ -13,6 +13,7 @@ const FireRiskMap: React.FC<FireRiskMapProps> = ({ onCountyHover }) => {
   const [geojson, setGeojson] = useState<any>(null);
   const [fireData, setFireData] = useState<FireData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [, setUpdateCounter] = useState(0); // ← Add this line
 
   useEffect(() => {
     Promise.all([
@@ -30,6 +31,15 @@ const FireRiskMap: React.FC<FireRiskMapProps> = ({ onCountyHover }) => {
       });
   }, []);
 
+  useEffect(() => {
+    // Update counter every minute to refresh timestamp display
+    const interval = setInterval(() => {
+      setUpdateCounter(c => c + 1); // Force re-render
+    }, 60000); // 60 seconds
+    
+    return () => clearInterval(interval);
+  }, []); // ← Empty dependency array!
+
   // Calculate total active fires
   const totalActiveFires = fireData.reduce((sum, d) => 
     sum + (d.active_fires_nearby || 0), 0
@@ -39,6 +49,32 @@ const FireRiskMap: React.FC<FireRiskMapProps> = ({ onCountyHover }) => {
   const countiesWithFires = fireData.filter(d => 
     (d.active_fires_nearby || 0) > 0
   ).length;
+
+  // Format last update time
+  const getLastUpdateText = () => {
+    if (fireData.length === 0) return 'Loading...';
+    
+    // Get timestamp from first county (they're all updated at the same time)
+    const timestamp = fireData[0].timestamp;
+    const lastUpdate = new Date(timestamp);
+    const now = new Date();
+    const diffMs = now.getTime() - lastUpdate.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    
+    if (diffMins < 1) return 'Just now';
+    if (diffMins < 60) return `${diffMins} min${diffMins > 1 ? 's' : ''} ago`;
+    if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+    
+    // For older data, show the actual time
+    return lastUpdate.toLocaleString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    });
+  };
 
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 h-full flex flex-col">
@@ -53,7 +89,7 @@ const FireRiskMap: React.FC<FireRiskMapProps> = ({ onCountyHover }) => {
           )}
           <div className="flex items-center gap-2 text-sm text-gray-600">
             <MapPin className="w-4 h-4" />
-            <span>Last updated: Just now</span>
+            <span>Last updated: {getLastUpdateText()}</span>
           </div>
         </div>
       </div>
@@ -105,7 +141,7 @@ const FireRiskMap: React.FC<FireRiskMapProps> = ({ onCountyHover }) => {
                 },
                 customdata: fireData.map(d => ([
                   d.fire_danger_level,
-                  d.temperature_f,
+                  Math.round(d.temperature_f),
                   d.relative_humidity,
                   d.drought_level || 'Unknown',
                   d.active_fires_nearby || 0

@@ -105,6 +105,15 @@ class ImprovedFireDataCollector:
             'San Benito': (36.5761, -121.0724),
             'Santa Cruz': (37.0510, -121.9952),
         }
+
+    def degrees_to_cardinal(self, d):
+        """Convert wind degrees to cardinal direction"""
+        if d is None:
+            return 'N/A'
+        dirs = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE',
+                'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW']
+        ix = round(d / (360. / len(dirs)))
+        return dirs[ix % len(dirs)]
     
     async def fetch_with_retry(self, session, url, max_retries=3):
         """Fetch URL with automatic retries"""
@@ -150,31 +159,75 @@ class ImprovedFireDataCollector:
             
             current = forecast_data['properties']['periods'][0]
             
-            # Get grid data for humidity
+            # Get CURRENT observations from nearest station (real measured data)
             try:
-                gridpoint_url = point_data['properties']['forecastGridData']
-                grid_data = await self.fetch_with_retry(session, gridpoint_url)
+                # Get observation stations
+                stations_url = point_data['properties']['observationStations']
+                stations_data = await self.fetch_with_retry(session, stations_url)
                 
-                # Extract latest humidity value
-                if grid_data and 'properties' in grid_data and 'relativeHumidity' in grid_data['properties']:
-                    humidity_data = grid_data['properties']['relativeHumidity']['values']
-                    if humidity_data and len(humidity_data) > 0:
-                        humidity = humidity_data[0]['value']
+                if stations_data and 'features' in stations_data:
+                    # Get latest observation from first station
+                    station_id = stations_data['features'][0]['properties']['stationIdentifier']
+                    obs_url = f"https://api.weather.gov/stations/{station_id}/observations/latest"
+                    obs_data = await self.fetch_with_retry(session, obs_url)
+                    
+                    if obs_data and 'properties' in obs_data:
+                        obs = obs_data['properties']
+                        
+                        # Get temperature (convert from Celsius if needed)
+                        temp_c = obs.get('temperature', {}).get('value')
+                        temp_f = (temp_c * 9/5 + 32) if temp_c else current.get('temperature', 'N/A')
+                        
+                        # Get humidity (actual observed)
+                        humidity_val = obs.get('relativeHumidity', {}).get('value')
+                        humidity = round(humidity_val) if humidity_val else 'N/A'
+                        
+                        # Get wind
+                        wind_speed = obs.get('windSpeed', {}).get('value')
+                        wind_speed_str = f"{round(wind_speed * 2.237)} mph" if wind_speed else current.get('windSpeed', 'N/A')
+                        
+                        # Get wind direction
+                        wind_dir = obs.get('windDirection', {}).get('value')
+                        wind_dir_str = self.degrees_to_cardinal(wind_dir) if wind_dir else current.get('windDirection', 'N/A')
+                        
+                        # Get description
+                        conditions = obs.get('textDescription', current.get('shortForecast', 'N/A'))
+                        
+                        result = {
+                            'temperature': temp_f,
+                            'wind_speed': wind_speed_str,
+                            'wind_direction': wind_dir_str,
+                            'relative_humidity': humidity,
+                            'short_forecast': conditions
+                        }
                     else:
-                        humidity = 'N/A'
+                        # Fallback to forecast if observations fail
+                        result = {
+                            'temperature': current.get('temperature', 'N/A'),
+                            'wind_speed': current.get('windSpeed', 'N/A'),
+                            'wind_direction': current.get('windDirection', 'N/A'),
+                            'relative_humidity': 'N/A',
+                            'short_forecast': current.get('shortForecast', 'N/A')
+                        }
                 else:
-                    humidity = 'N/A'
-            except:
-                humidity = 'N/A'
-            
-            result = {
-                'temperature': current.get('temperature', 'N/A'),
-                'wind_speed': current.get('windSpeed', 'N/A'),
-                'wind_direction': current.get('windDirection', 'N/A'),
-                'relative_humidity': humidity,
-                'short_forecast': current.get('shortForecast', 'N/A')
-            }
-            
+                    # Fallback to forecast
+                    result = {
+                        'temperature': current.get('temperature', 'N/A'),
+                        'wind_speed': current.get('windSpeed', 'N/A'),
+                        'wind_direction': current.get('windDirection', 'N/A'),
+                        'relative_humidity': 'N/A',
+                        'short_forecast': current.get('shortForecast', 'N/A')
+                    }
+            except Exception as e:
+                # Final fallback
+                result = {
+                    'temperature': current.get('temperature', 'N/A'),
+                    'wind_speed': current.get('windSpeed', 'N/A'),
+                    'wind_direction': current.get('windDirection', 'N/A'),
+                    'relative_humidity': 'N/A',
+                    'short_forecast': current.get('shortForecast', 'N/A')
+                }
+
             # Cache it
             self.set_cache(f"nws_{county}", result, duration_minutes=60)
             return result

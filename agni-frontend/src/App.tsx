@@ -3,6 +3,7 @@ import Header from './Header';
 import Footer from './Footer';
 import Home from './Home';
 import About from './About';
+import FirstResponders from './FirstResponders';  // Add this import
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
+        <Route path="/first-responders" element={<FirstResponders />} />  {/* Add this route */}
       </Routes>
       <Footer />
     </div>

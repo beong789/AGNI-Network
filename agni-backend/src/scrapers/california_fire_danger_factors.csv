@@ -1,59 +1,59 @@
 county,timestamp,temperature_f,wind_speed,wind_direction,relative_humidity,conditions,drought_level,active_fires_nearby,statewide_active_fires,fire_danger_level,risk_score
-Mariposa,2025-11-08 18:16:23,72,0 to 5 mph,S,96,Sunny,None,0,0,Moderate,2
-Glenn,2025-11-08 18:16:23,74,2 to 6 mph,NNE,100,Sunny,None,0,0,Moderate,2
-Marin,2025-11-08 18:16:24,74,2 to 6 mph,N,98,Sunny,None,0,0,Moderate,2
-Calaveras,2025-11-08 18:16:24,72,2 mph,WSW,83,Sunny,None,0,0,Moderate,2
-Colusa,2025-11-08 18:16:24,74,5 mph,NNE,98,Sunny,None,0,0,Moderate,2
-San Mateo,2025-11-08 18:16:24,53,2 mph,WNW,82,Mostly Clear,None,0,0,Low,1
-San Benito,2025-11-08 18:16:24,73,6 mph,NE,75,Sunny,None,0,0,Moderate,2
-Santa Cruz,2025-11-08 18:16:24,76,2 mph,NNE,88,Sunny,None,0,0,Moderate,3
-Trinity,2025-11-08 18:16:24,61,5 mph,E,71,Sunny,None,0,0,Moderate,2
-Riverside,2025-11-08 18:16:24,86,0 to 10 mph,W,64,Sunny,None,0,0,Elevated,4
-Plumas,2025-11-08 18:16:24,56,6 mph,ENE,92,Sunny,None,0,0,Low,1
-Solano,2025-11-08 18:16:24,74,6 mph,N,82,Sunny,None,0,0,Moderate,2
-Sonoma,2025-11-08 18:16:24,76,2 mph,S,84,Sunny,None,0,0,Moderate,3
-Napa,2025-11-08 18:16:24,73,3 mph,N,85,Sunny,None,0,0,Moderate,2
-Alpine,2025-11-08 18:16:24,53,5 to 10 mph,NE,87,Sunny,None,0,0,Moderate,2
-Amador,2025-11-08 18:16:25,74,3 mph,WSW,81,Sunny,None,0,0,Moderate,2
-Siskiyou,2025-11-08 18:16:25,64,2 mph,NW,88,Mostly Sunny,None,0,0,Moderate,2
-San Francisco,2025-11-08 18:16:25,72,3 to 7 mph,N,86,Sunny,None,0,0,Moderate,2
-Merced,2025-11-08 18:16:25,73,0 to 5 mph,SW,100,Sunny,None,0,0,Moderate,2
-Kern,2025-11-08 18:16:25,76,0 to 5 mph,WNW,90,Sunny,None,0,0,Moderate,3
-Tuolumne,2025-11-08 18:16:25,68,2 mph,SSW,80,Sunny,None,0,0,Moderate,2
-San Diego,2025-11-08 18:16:25,72,0 to 5 mph,SW,87,Patchy Fog then Mostly Sunny,None,0,0,Moderate,2
-Lassen,2025-11-08 18:16:25,56,5 mph,SE,80,Sunny,None,0,0,Low,1
-Shasta,2025-11-08 18:16:25,77,5 mph,NE,83,Sunny,None,0,0,Moderate,3
-Yuba,2025-11-08 18:16:25,74,3 mph,WSW,86,Sunny,None,0,0,Moderate,2
-Sutter,2025-11-08 18:16:25,71,3 mph,E,90,Sunny,None,0,0,Moderate,2
-Ventura,2025-11-08 18:16:25,82,0 to 5 mph,SE,61,Sunny,None,0,0,Moderate,3
-San Luis Obispo,2025-11-08 18:16:25,80,5 to 10 mph,NNE,81,Sunny,None,0,0,Elevated,4
-Mono,2025-11-08 18:16:25,59,5 mph,N,79,Sunny,None,0,0,Low,1
-Sacramento,2025-11-08 18:16:25,72,2 mph,SSE,82,Sunny,None,0,0,Moderate,2
-Los Angeles,2025-11-08 18:16:26,82,0 to 5 mph,SSW,82,Sunny,None,0,0,Moderate,3
-Humboldt,2025-11-08 18:16:26,69,2 mph,NNW,83,Mostly Sunny,None,0,0,Moderate,2
-Contra Costa,2025-11-08 18:16:26,70,6 mph,NE,84,Sunny,None,0,0,Moderate,2
-Santa Barbara,2025-11-08 18:16:26,78,0 to 5 mph,S,81,Sunny,None,0,0,Moderate,3
-Nevada,2025-11-08 18:16:26,67,2 mph,W,87,Sunny,None,0,0,Moderate,2
-El Dorado,2025-11-08 18:16:26,71,2 mph,WSW,90,Sunny,None,0,0,Moderate,2
-Kings,2025-11-08 18:16:27,74,0 to 5 mph,NNW,100,Sunny,None,0,0,Moderate,2
-Imperial,2025-11-08 18:16:27,89,0 to 5 mph,NNW,41,Sunny,None,0,0,Elevated,4
-San Bernardino,2025-11-08 18:16:27,88,0 to 10 mph,N,58,Sunny,None,0,0,Elevated,4
-Inyo,2025-11-08 18:16:27,61,6 to 10 mph,NW,60,Sunny,None,0,0,Moderate,3
-Alameda,2025-11-08 18:16:27,71,6 mph,NNE,84,Sunny,None,0,0,Moderate,2
-Butte,2025-11-08 18:16:27,73,3 mph,W,86,Sunny,None,0,0,Moderate,2
-Orange,2025-11-08 18:16:27,78,0 to 5 mph,SW,88,Sunny,None,0,0,Moderate,3
-Tehama,2025-11-08 18:16:27,73,2 to 6 mph,NE,93,Sunny,None,0,0,Moderate,2
-San Joaquin,2025-11-08 18:16:28,72,2 mph,N,84,Patchy Fog then Sunny,None,0,0,Moderate,2
-Monterey,2025-11-08 18:16:28,66,7 mph,NNW,93,Mostly Sunny,None,0,0,Moderate,2
-Fresno,2025-11-08 18:16:28,74,0 to 5 mph,WSW,96,Mostly Sunny,None,0,0,Moderate,2
-Santa Clara,2025-11-08 18:16:28,76,2 to 6 mph,NNW,88,Sunny,None,0,0,Moderate,3
-Del Norte,2025-11-08 18:16:29,66,2 mph,W,93,Mostly Sunny,None,0,0,Moderate,2
-Mendocino,2025-11-08 18:16:29,73,3 mph,WSW,90,Sunny,None,0,0,Moderate,2
-Madera,2025-11-08 18:16:30,74,0 mph,,93,Sunny,None,0,0,Moderate,2
-Stanislaus,2025-11-08 18:16:31,74,3 mph,N,86,Sunny,None,0,0,Moderate,2
-Lake,2025-11-08 18:16:35,68,2 mph,NE,72,Sunny,None,0,0,Moderate,2
-Sierra,2025-11-08 18:16:37,56,3 to 7 mph,E,95,Sunny,None,0,0,Low,1
-Modoc,2025-11-08 18:16:37,66,3 mph,E,96,Mostly Sunny,None,0,0,Moderate,2
-Tulare,2025-11-08 18:16:37,74,0 to 5 mph,W,89,Sunny,None,0,0,Moderate,2
-Placer,2025-11-08 18:16:38,74,2 mph,WSW,88,Sunny,None,0,0,Moderate,2
-Yolo,2025-11-08 18:16:39,72,2 to 6 mph,N,84,Sunny,None,0,0,Moderate,2
+Imperial,2025-11-08 20:14:40,86.0,0 to 5 mph,NNW,18,Clear,None,0,0,High,6
+Napa,2025-11-08 20:14:40,66.2,12 mph,WSW,68,Clear,None,0,0,Moderate,3
+Del Norte,2025-11-08 20:14:40,62.6,25 mph,S,68,Clear,None,0,0,Elevated,4
+San Bernardino,2025-11-08 20:14:40,86.0,0 to 10 mph,N,N/A,,None,0,0,Elevated,5
+San Luis Obispo,2025-11-08 20:14:40,80.6,25 mph,NW,39,Clear,None,0,0,High,6
+Colusa,2025-11-08 20:14:40,69.998,25 mph,NNE,45,,None,0,0,Elevated,5
+San Benito,2025-11-08 20:14:40,73.0,11 mph,SE,N/A,,None,0,0,Elevated,4
+Alameda,2025-11-08 20:14:40,73.4,37 mph,E,N/A,Clear,None,0,0,High,7
+Riverside,2025-11-08 20:14:40,86.0,12 mph,NW,24,Clear,None,0,0,High,6
+Kern,2025-11-08 20:14:40,76.0,5 mph,NW,N/A,Sunny,None,0,0,Elevated,5
+Yuba,2025-11-08 20:14:40,69.008,7 mph,WSW,42,,None,0,0,Moderate,3
+Calaveras,2025-11-08 20:14:40,71.006,18 mph,SW,43,,None,0,0,Elevated,4
+Tulare,2025-11-08 20:14:40,69.998,11 mph,SW,53,,None,0,0,Moderate,3
+Los Angeles,2025-11-08 20:14:40,76.334,4 mph,SSW,54,,None,0,0,Moderate,3
+Solano,2025-11-08 20:14:40,67.82,17 mph,NNW,51,,None,0,0,Moderate,3
+Mendocino,2025-11-08 20:14:40,62.995999999999995,4 mph,SE,63,,None,0,0,Moderate,2
+Siskiyou,2025-11-08 20:14:40,51.8,12 mph,SSW,62,Clear,None,0,0,Moderate,2
+Santa Cruz,2025-11-08 20:14:40,68.0,2 to 10 mph,N,75,,None,0,0,Moderate,3
+Contra Costa,2025-11-08 20:14:40,62.924,22 mph,NNE,26,,None,0,0,High,6
+Shasta,2025-11-08 20:14:40,66.992,4 mph,SW,49,,None,0,0,Moderate,3
+Tuolumne,2025-11-08 20:14:40,69.008,29 mph,SE,37,,None,0,0,Elevated,5
+Madera,2025-11-08 20:14:40,67.04599999999999,16 mph,S,65,,None,0,0,Moderate,3
+Fresno,2025-11-08 20:14:40,69.8,0 to 5 mph,W,60,Clear,None,0,0,Moderate,2
+Sacramento,2025-11-08 20:14:40,66.2,17 mph,NW,64,Clear,None,0,0,Moderate,3
+Lake,2025-11-08 20:14:40,68.0,11 mph,E,N/A,,None,0,0,Elevated,4
+Modoc,2025-11-08 20:14:40,55.4,3 mph,E,47,Clear,None,0,0,Moderate,2
+San Mateo,2025-11-08 20:14:40,60.8,5 to 9 mph,N,88,Mostly Clear,None,0,0,Moderate,2
+San Diego,2025-11-08 20:14:40,60.8,21 mph,SSW,88,Fog/Mist,None,0,0,Elevated,4
+Trinity,2025-11-08 20:14:40,61.0,3 mph,E,N/A,Mostly Sunny,None,0,0,Elevated,4
+Mariposa,2025-11-08 20:14:40,69.998,11 mph,SSE,59,,None,0,0,Moderate,3
+Merced,2025-11-08 20:14:40,57.2,17 mph,ESE,100,Fog/Mist,None,0,0,Moderate,2
+Placer,2025-11-08 20:14:40,69.998,4 mph,ESE,39,,None,0,0,Moderate,3
+Nevada,2025-11-08 20:14:40,67.0,4 mph,N,N/A,,None,0,0,Moderate,3
+Lassen,2025-11-08 20:14:40,44.096000000000004,3 mph,WSW,N/A,,None,0,0,Moderate,2
+Santa Clara,2025-11-08 20:14:40,69.8,33 mph,NW,56,Clear,None,0,0,Elevated,5
+Santa Barbara,2025-11-08 20:14:40,68.0,14 mph,SSW,78,,None,0,0,Moderate,3
+Kings,2025-11-08 20:14:40,66.992,18 mph,NNE,66,,None,0,0,Moderate,3
+Tehama,2025-11-08 20:14:40,66.92,25 mph,N,51,,None,0,0,Elevated,4
+Mono,2025-11-08 20:14:40,52.574,15 mph,NE,57,,None,0,0,Moderate,2
+Stanislaus,2025-11-08 20:14:40,69.8,12 mph,NW,56,Clear,None,0,0,Moderate,3
+El Dorado,2025-11-08 20:14:40,68.0,7 mph,SSE,50,,None,0,0,Moderate,3
+Sierra,2025-11-08 20:14:40,60.998000000000005,47 mph,NE,29,,None,0,0,High,7
+Ventura,2025-11-08 20:14:40,78.62,15 mph,NE,31,,None,0,0,High,6
+Plumas,2025-11-08 20:14:40,53.996,7 mph,SW,67,,None,0,0,Low,1
+Marin,2025-11-08 20:14:40,74.0,2 to 9 mph,NNW,N/A,,None,0,0,Moderate,3
+Orange,2025-11-08 20:14:40,78.0,0 to 5 mph,SW,N/A,,None,0,0,Elevated,4
+Butte,2025-11-08 20:14:40,66.992,83 mph,NNE,35,Windy,None,0,0,High,7
+Inyo,2025-11-08 20:14:40,83.40799999999999,4 mph,SW,20,,None,0,0,High,6
+San Joaquin,2025-11-08 20:14:40,69.8,29 mph,W,60,Clear,None,0,0,Elevated,4
+Yolo,2025-11-08 20:14:40,64.4,33 mph,N,64,Clear,None,0,0,Elevated,5
+Alpine,2025-11-08 20:14:40,57.992000000000004,7 mph,N,51,,None,0,0,Low,1
+Humboldt,2025-11-08 20:14:40,71.996,14 mph,SW,N/A,,None,0,0,Elevated,4
+Sonoma,2025-11-08 20:14:40,66.2,12 mph,WSW,68,Clear,None,0,0,Moderate,3
+Amador,2025-11-08 20:14:40,66.992,4 mph,WSW,55,,None,0,0,Moderate,2
+Glenn,2025-11-08 20:14:40,69.998,25 mph,NNE,45,,None,0,0,Elevated,5
+Monterey,2025-11-08 20:14:40,69.8,33 mph,NW,60,Clear,None,0,0,Elevated,5
+San Francisco,2025-11-08 20:14:40,65.66,6 to 10 mph,NNW,65,,None,0,0,Moderate,3
+Sutter,2025-11-08 20:14:40,66.2,17 mph,SSE,68,Clear,None,0,0,Moderate,3

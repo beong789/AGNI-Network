@@ -14,7 +14,7 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({ countyData }) => 
         <div className="flex justify-between items-center">
           <span className="text-gray-600">Temperature</span>
           <span className="font-semibold text-lg">
-            {countyData ? `${countyData.temperature_f}°F` : '--'}
+            {countyData ? `${Math.round(countyData.temperature_f)}°F` : '--'}          
           </span>
         </div>
         <div className="flex justify-between items-center">
